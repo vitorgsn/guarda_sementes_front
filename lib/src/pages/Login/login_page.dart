@@ -10,8 +10,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _loginController = TextEditingController();
+  final TextEditingController _senhaController = TextEditingController();
   final AuthenticationController _authenticationController =
       AuthenticationController();
   bool _isObscureText = true;
@@ -20,180 +20,205 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                SingleChildScrollView(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 250,
-                            height: 250,
-                            child: Image.asset('lib/assets/images/logo.png'),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            child: Text(
-                              'Guarda Sementes',
-                              style: GoogleFonts.bungeeInline(
-                                  color: Colors.white, fontSize: 30),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  SingleChildScrollView(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 250,
+                              height: 250,
+                              child: Image.asset('lib/assets/images/logo.png'),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 50,
-                          ),
-                          Card(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 12, right: 12, top: 20, bottom: 12),
-                              child: Column(
-                                children: [
-                                  TextField(
-                                    controller: _emailController,
-                                    keyboardType: TextInputType.emailAddress,
-                                    decoration: const InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color.fromRGBO(
-                                                76, 175, 80, 0.8),
-                                          ),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color.fromRGBO(
-                                                  76, 175, 80, 0.8)),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.email,
-                                          color:
-                                              Color.fromRGBO(76, 175, 80, 0.8),
-                                        ),
-                                        labelText: 'Email',
-                                        border: OutlineInputBorder()),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  TextField(
-                                    controller: _passwordController,
-                                    keyboardType: TextInputType.visiblePassword,
-                                    obscureText: _isObscureText,
-                                    decoration: InputDecoration(
-                                        enabledBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color.fromRGBO(
-                                                76, 175, 80, 0.8),
-                                          ),
-                                        ),
-                                        focusedBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color.fromRGBO(
-                                                  76, 175, 80, 0.8)),
-                                        ),
-                                        labelText: 'Senha',
-                                        prefixIcon: const Icon(
-                                          Icons.lock,
-                                          color:
-                                              Color.fromRGBO(76, 175, 80, 0.8),
-                                        ),
-                                        suffixIcon: GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              _isObscureText = !_isObscureText;
-                                            });
-                                          },
-                                          child: Icon(
-                                            _isObscureText
-                                                ? Icons.visibility_off
-                                                : Icons.visibility,
-                                            color: const Color.fromRGBO(
-                                                76, 175, 80, 0.8),
-                                          ),
-                                        ),
-                                        border: const OutlineInputBorder()),
-                                  ),
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: Theme.of(context)
-                                                  .primaryColor),
-                                          onPressed: () async {
-                                            try {
-                                              await _authenticationController
-                                                  .login(_emailController.text,
-                                                      _passwordController.text);
-                                              Navigator.of(context)
-                                                  .pushReplacementNamed('/');
-                                            } catch (e) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                  backgroundColor:
-                                                      Colors.redAccent,
-                                                  content: Text(
-                                                      'Email ou senha inválidos.'),
-                                                  behavior:
-                                                      SnackBarBehavior.floating,
-                                                ),
-                                              );
-                                            }
-                                          },
-                                          child: const SizedBox(
-                                            child: Text(
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                                'Entrar'),
-                                          )),
-                                      ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: Theme.of(context)
-                                                  .primaryColor),
-                                          onPressed: () {
-                                            debugPrint('ok');
-                                          },
-                                          child: const SizedBox(
-                                            child: Text(
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                                'Cadastre-se'),
-                                          )),
-                                    ],
-                                  ),
-                                ],
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            SizedBox(
+                              child: Text(
+                                'Guarda Sementes',
+                                style: GoogleFonts.bungeeInline(
+                                    color: Colors.white, fontSize: 30),
                               ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(
+                              height: 50,
+                            ),
+                            Card(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 30),
+                                child: Column(
+                                  children: [
+                                    TextField(
+                                      controller: _loginController,
+                                      keyboardType: TextInputType.name,
+                                      style: const TextStyle(fontSize: 20),
+                                      decoration: const InputDecoration(
+                                          labelStyle:
+                                              TextStyle(color: Colors.black),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color.fromRGBO(
+                                                  76, 175, 80, 0.8),
+                                            ),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Color.fromRGBO(
+                                                    76, 175, 80, 0.8)),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.person,
+                                            color: Color.fromRGBO(
+                                                76, 175, 80, 0.8),
+                                          ),
+                                          labelText: 'Usuário',
+                                          border: OutlineInputBorder()),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    TextField(
+                                      controller: _senhaController,
+                                      keyboardType:
+                                          TextInputType.visiblePassword,
+                                      style: const TextStyle(fontSize: 20),
+                                      obscureText: _isObscureText,
+                                      decoration: InputDecoration(
+                                          labelStyle: const TextStyle(
+                                              color: Colors.black),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color.fromRGBO(
+                                                  76, 175, 80, 0.8),
+                                            ),
+                                          ),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Color.fromRGBO(
+                                                    76, 175, 80, 0.8)),
+                                          ),
+                                          labelText: 'Senha',
+                                          prefixIcon: const Icon(
+                                            Icons.lock,
+                                            color: Color.fromRGBO(
+                                                76, 175, 80, 0.8),
+                                          ),
+                                          suffixIcon: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                _isObscureText =
+                                                    !_isObscureText;
+                                              });
+                                            },
+                                            child: Icon(
+                                              _isObscureText
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
+                                              color: const Color.fromRGBO(
+                                                  76, 175, 80, 0.8),
+                                            ),
+                                          ),
+                                          border: const OutlineInputBorder()),
+                                    ),
+                                    const SizedBox(
+                                      height: 40,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                elevation: 5,
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .primaryColor),
+                                            onPressed: () async {
+                                              try {
+                                                await _authenticationController
+                                                    .login(
+                                                        _loginController.text,
+                                                        _senhaController.text);
+                                                Navigator.of(context)
+                                                    .pushReplacementNamed('/');
+                                              } catch (e) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                    backgroundColor:
+                                                        Colors.redAccent,
+                                                    content: Text(
+                                                        'Usuário ou Senha incorretos'),
+                                                    behavior: SnackBarBehavior
+                                                        .floating,
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 30,
+                                                      vertical: 15),
+                                              child: const Text(
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 15),
+                                                  textAlign: TextAlign.center,
+                                                  'ENTRAR'),
+                                            )),
+                                        ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                elevation: 5,
+                                                backgroundColor:
+                                                    Colors.lightBlueAccent),
+                                            onPressed: () {
+                                              debugPrint('ok');
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15,
+                                                      vertical: 15),
+                                              child: const Text(
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                  'CADASTRE-SE'),
+                                            )),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:guarda_sementes_front/src/pages/Guardioes/GuardioesPage.dart';
+import 'package:guarda_sementes_front/src/pages/Perfil/PerfilPage.dart';
+import 'package:guarda_sementes_front/src/pages/Sementes/sementes_disponiveis_troca_page.dart';
+import 'package:guarda_sementes_front/src/pages/Sementes/SementesPage.dart';
+import 'package:guarda_sementes_front/src/pages/Trocas/TrocasPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -8,138 +13,115 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int currentPageIndex = 0;
+  int paginaAtual = 0;
+  late PageController pc;
+
+  @override
+  void initState() {
+    super.initState();
+    pc = PageController(initialPage: paginaAtual);
+  }
+
+  setPaginaAtual(pagina) {
+    setState(() {
+      paginaAtual = pagina;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return Scaffold(
+      body: PageView(
+        controller: pc,
+        onPageChanged: setPaginaAtual,
+        children: const [
+          SementesDisponiveisTrocaPage(),
+          TrocasPage(),
+          GuardioesPage(),
+          SementesPage(),
+          PerfilPage()
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
-        backgroundColor: theme.primaryColor,
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
+        selectedIndex: paginaAtual,
+        onDestinationSelected: (int i) {
+          pc.animateToPage(i,
+              duration: const Duration(milliseconds: 400), curve: Curves.ease);
         },
-        indicatorColor: Colors.transparent,
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
+        destinations: const [
           NavigationDestination(
-            selectedIcon: Icon(Icons.home_outlined),
-            icon: Icon(Icons.home),
-            label: 'Início',
-          ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.change_circle_outlined),
             icon: Badge(
               isLabelVisible: false,
-              child: Icon(Icons.change_circle),
+              child: Icon(
+                Icons.store_outlined,
+                size: 40,
+              ),
+            ),
+            selectedIcon: Icon(
+              Icons.store,
+              size: 60,
+            ),
+            label: 'Feira',
+          ),
+          NavigationDestination(
+            icon: Badge(
+              isLabelVisible: false,
+              child: Icon(
+                Icons.handshake_outlined,
+                size: 40,
+              ),
+            ),
+            selectedIcon: Icon(
+              Icons.handshake,
+              size: 60,
             ),
             label: 'Trocas',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.groups_outlined),
             icon: Badge(
               isLabelVisible: false,
-              child: Icon(Icons.groups),
+              child: Icon(
+                Icons.supervised_user_circle_outlined,
+                size: 40,
+              ),
+            ),
+            selectedIcon: Icon(
+              Icons.supervised_user_circle,
+              size: 60,
             ),
             label: 'Guardiões',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.grain_outlined),
             icon: Badge(
               isLabelVisible: false,
-              child: Icon(Icons.grain),
+              child: Icon(
+                Icons.grain_outlined,
+                size: 40,
+              ),
+            ),
+            selectedIcon: Icon(
+              Icons.grain,
+              size: 60,
             ),
             label: 'Sementes',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.account_box_outlined),
-            icon: Icon(Icons.account_box),
-            label: 'Perfil',
-          ),
-        ],
-      ),
-      body: <Widget>[
-        /// Home page
-        Card(
-          shadowColor: Colors.transparent,
-          margin: const EdgeInsets.all(8.0),
-          child: SizedBox.expand(
-            child: Center(
-              child: Text(
-                'Home page',
-                style: theme.textTheme.titleLarge,
+            icon: Badge(
+              isLabelVisible: false,
+              child: Icon(
+                Icons.account_circle_outlined,
+                size: 40,
               ),
             ),
-          ),
-        ),
-
-        /// Notifications page
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 1'),
-                  subtitle: Text('This is a notification'),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 2'),
-                  subtitle: Text('This is a notification'),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        /// Messages page
-        ListView.builder(
-          reverse: true,
-          itemCount: 2,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  margin: const EdgeInsets.all(8.0),
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Text(
-                    'Hello',
-                    style: theme.textTheme.bodyLarge!
-                        .copyWith(color: theme.colorScheme.onPrimary),
-                  ),
-                ),
-              );
-            }
-            return Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                margin: const EdgeInsets.all(8.0),
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Text(
-                  'Hi!',
-                  style: theme.textTheme.bodyLarge!
-                      .copyWith(color: theme.colorScheme.onPrimary),
-                ),
-              ),
-            );
-          },
-        ),
-      ][currentPageIndex],
+            selectedIcon: Icon(
+              Icons.account_circle,
+              size: 60,
+            ),
+            label: 'Perfil',
+          )
+        ],
+      ),
     );
   }
 }

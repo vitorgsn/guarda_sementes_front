@@ -5,14 +5,12 @@ import 'package:guarda_sementes_front/src/services/authentication_service.dart';
 class AuthenticationController extends ChangeNotifier {
   final AuthenticationService _authenticationService = AuthenticationService();
   AuthenticationModel? _authenticationModel;
-
   AuthenticationModel? get authenticationModel => _authenticationModel;
 
   // Tenta fazer login
-  Future<void> login(String email, String password) async {
+  Future<void> login(String usuario, String senha) async {
     try {
-      _authenticationModel =
-          await _authenticationService.login(email, password);
+      _authenticationModel = await _authenticationService.login(usuario, senha);
       debugPrint(authenticationModel.toString());
       notifyListeners();
     } catch (e) {

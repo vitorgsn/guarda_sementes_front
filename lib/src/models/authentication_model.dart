@@ -1,25 +1,30 @@
 class AuthenticationModel {
   AuthenticationModel({
-    required String accessToken,
-    required int expiresIn,
-  })  : _accessToken = accessToken,
-        _expiresIn = expiresIn;
+    required String usuTxNome,
+    required String usuNrId,
+    required String token,
+  })  : _usuTxNome = usuTxNome,
+        _usuNrId = usuNrId,
+        _token = token;
 
-  final String? _accessToken;
-  final int? _expiresIn;
+  final String? _usuTxNome;
+  final String? _usuNrId;
+  final String? _token;
 
-  String? get accessToken => _accessToken;
-  int? get expiresIn => _expiresIn;
+  String? get usuTxNome => _usuTxNome;
+  String? get usuNrId => _usuNrId;
+  String? get token => _token;
 
   factory AuthenticationModel.fromJson(Map<String, dynamic> json) {
     return AuthenticationModel(
-      accessToken: json["accessToken"] ?? "",
-      expiresIn: json["expiresIn"] ?? 0,
+      usuTxNome: json["usuTxNome"],
+      usuNrId: json["usuNrId"],
+      token: json["token"] ?? "",
     );
   }
 
   @override
   String toString() {
-    return "$_accessToken, $_expiresIn";
+    return "$_token, $_usuNrId, $_token";
   }
 }
