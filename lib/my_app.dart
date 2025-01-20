@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
         ),
         appBarTheme: AppBarTheme(
           centerTitle: true,
+          backgroundColor: const Color.fromRGBO(76, 175, 80, 0.8),
           titleTextStyle: GoogleFonts.bungeeInline(
             textStyle: const TextStyle(
               color: Colors.black87,

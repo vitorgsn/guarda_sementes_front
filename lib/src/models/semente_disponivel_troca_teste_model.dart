@@ -5,6 +5,8 @@ class SementeDisponivelTrocaTesteModel {
   int semNrIdSemente;
   String semTxNome;
   String sdtTxObservacoes;
+  String cidTxNome;
+  String estTxSigla;
   String icone;
 
   SementeDisponivelTrocaTesteModel({
@@ -12,6 +14,8 @@ class SementeDisponivelTrocaTesteModel {
     required this.sdtBlDisponivel,
     required this.semNrIdSemente,
     required this.semTxNome,
+    required this.cidTxNome,
+    required this.estTxSigla,
     required this.sdtTxObservacoes,
     required this.sdtNrQuantidade,
     required this.icone,

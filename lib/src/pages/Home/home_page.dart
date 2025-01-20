@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:guarda_sementes_front/src/pages/Guardioes/GuardioesPage.dart';
-import 'package:guarda_sementes_front/src/pages/Perfil/PerfilPage.dart';
+import 'package:guarda_sementes_front/src/pages/Perfil/perfil_page.dart';
 import 'package:guarda_sementes_front/src/pages/Sementes/sementes_disponiveis_troca_page.dart';
-import 'package:guarda_sementes_front/src/pages/Sementes/SementesPage.dart';
-import 'package:guarda_sementes_front/src/pages/Trocas/TrocasPage.dart';
+import 'package:guarda_sementes_front/src/pages/Sementes/categoria_semente_page.dart';
+import 'package:guarda_sementes_front/src/pages/Trocas/trocas_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
           SementesDisponiveisTrocaPage(),
           TrocasPage(),
           GuardioesPage(),
-          SementesPage(),
+          CategoriaSementePage(),
           PerfilPage()
         ],
       ),
