@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SementeDetalhePage extends StatefulWidget {
   final String imagem;
   final String nome;
-  final int quantidade;
+  final double quantidade;
 
   const SementeDetalhePage({
     super.key,

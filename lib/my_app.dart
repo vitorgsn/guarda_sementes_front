@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return SafeArea(child: child!);
       },
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginPage(),
         '/': (context) => const HomePage()
