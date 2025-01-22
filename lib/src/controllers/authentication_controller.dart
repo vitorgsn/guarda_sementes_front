@@ -7,25 +7,22 @@ class AuthenticationController extends ChangeNotifier {
   AuthenticationModel? _authenticationModel;
   AuthenticationModel? get authenticationModel => _authenticationModel;
 
-  // Tenta fazer login
   Future<void> login(String usuario, String senha) async {
     try {
       _authenticationModel = await _authenticationService.login(usuario, senha);
       debugPrint(authenticationModel.toString());
       notifyListeners();
     } catch (e) {
-      throw Exception('Erro ao autenticar: $e');
+      rethrow;
     }
   }
 
-  // Faz logout
   Future<void> logout() async {
     await _authenticationService.logout();
     _authenticationModel = null;
     notifyListeners();
   }
 
-  // Verifica se o usuário está autenticado
   Future<bool> isAuthenticated() async {
     return await _authenticationService.isAuthenticated();
   }

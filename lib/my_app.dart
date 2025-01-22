@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:guarda_sementes_front/src/pages/Login/login_page.dart';
-import 'package:guarda_sementes_front/src/pages/Home/home_page.dart';
+import 'package:guarda_sementes_front/src/pages/login/login_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -61,7 +60,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginPage(),
-        '/': (context) => const HomePage()
       },
     );
   }

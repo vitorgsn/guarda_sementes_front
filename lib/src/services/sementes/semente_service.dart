@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:guarda_sementes_front/src/models/semente.dart';
+import 'package:guarda_sementes_front/src/models/sementes/semente.dart';
 import 'package:http/http.dart' as http;
 
 class SementeService {
@@ -9,14 +9,23 @@ class SementeService {
   var token = '';
   final _storage = const FlutterSecureStorage();
 
-  Future<List<Semente>> listarSementes() async {
+  Future<List<Semente>> listarSementes({Map<String, dynamic>? filtros}) async {
+    // Recupera o token
     token = (await _storage.read(key: 'token'))!;
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
     };
 
-    final response = await http.get(Uri.parse(baseUrl), headers: headers);
+    // Construa a URL com os filtros
+    final uri = Uri.parse(baseUrl).replace(
+      queryParameters:
+          filtros?.map((key, value) => MapEntry(key, value.toString())),
+    );
+
+    print(uri);
+
+    final response = await http.get(uri, headers: headers);
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);

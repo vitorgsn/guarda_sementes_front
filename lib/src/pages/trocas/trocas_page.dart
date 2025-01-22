@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guarda_sementes_front/src/pages/Trocas/troca_detalhe_page.dart';
+import 'package:guarda_sementes_front/src/pages/trocas/troca_detalhe_page.dart';
 
 class TrocasPage extends StatefulWidget {
   const TrocasPage({super.key});

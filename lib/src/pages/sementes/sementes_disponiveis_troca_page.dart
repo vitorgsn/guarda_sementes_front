@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guarda_sementes_front/src/pages/Trocas/escolher_semente_troca_page.dart';
+import 'package:guarda_sementes_front/src/pages/trocas/escolher_semente_troca_page.dart';
 import 'package:guarda_sementes_front/src/repositories/semente_disponivel_troca_teste_repository.dart';
 
 class SementesDisponiveisTrocaPage extends StatefulWidget {

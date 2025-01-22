@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guarda_sementes_front/src/controllers/authentication_controller.dart';
-import 'package:guarda_sementes_front/src/pages/Perfil/contato_page.dart';
-import 'package:guarda_sementes_front/src/pages/Perfil/endereco_page.dart';
+import 'package:guarda_sementes_front/src/pages/perfil/contato_page.dart';
+import 'package:guarda_sementes_front/src/pages/perfil/endereco_page.dart';
 
 class PerfilPage extends StatefulWidget {
   const PerfilPage({super.key});
