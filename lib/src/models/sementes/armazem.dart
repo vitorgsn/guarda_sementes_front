@@ -1,18 +1,18 @@
 class Armazem {
-  final int armNrId;
+  final int? armNrId;
   final String armTxDescricao;
-  final DateTime armDtCreatedAt;
-  final DateTime armDtUpdateAt;
+  final DateTime? armDtCreatedAt;
+  final DateTime? armDtUpdateAt;
   final int ctaNrId;
-  final bool armBlAtivo;
+  final bool? armBlAtivo;
 
   Armazem({
-    required this.armNrId,
+    this.armNrId,
     required this.armTxDescricao,
-    required this.armDtCreatedAt,
-    required this.armDtUpdateAt,
+    this.armDtCreatedAt,
+    this.armDtUpdateAt,
     required this.ctaNrId,
-    required this.armBlAtivo,
+    this.armBlAtivo,
   });
 
   factory Armazem.fromJson(Map<String, dynamic> json) {
@@ -31,5 +31,12 @@ class Armazem {
     return 'Armazem{armNrId: $armNrId, armTxDescricao: $armTxDescricao,'
         'armDtCreatedAt: $armDtCreatedAt, '
         'armDtUpdateAt: $armDtUpdateAt, ctaNrId: $ctaNrId, armBlAtivo: $armBlAtivo}';
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'armTxDescricao': armTxDescricao,
+      'ctaNrId': ctaNrId,
+    };
   }
 }

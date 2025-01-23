@@ -1,21 +1,21 @@
 class Semente {
-  final int semNrId;
+  final int? semNrId;
   final String semTxNome;
   final double semNrQuantidade;
   final String semTxDescricao;
-  final DateTime semDtCreatedAt;
-  final DateTime semDtUpdateAt;
-  final bool semBlAtivo;
+  final DateTime? semDtCreatedAt;
+  final DateTime? semDtUpdateAt;
+  final bool? semBlAtivo;
   final int armNrId;
 
   Semente({
-    required this.semNrId,
+    this.semNrId,
     required this.semTxNome,
     required this.semNrQuantidade,
     required this.semTxDescricao,
-    required this.semDtCreatedAt,
-    required this.semDtUpdateAt,
-    required this.semBlAtivo,
+    this.semDtCreatedAt,
+    this.semDtUpdateAt,
+    this.semBlAtivo,
     required this.armNrId,
   });
 
@@ -37,5 +37,14 @@ class Semente {
     return 'Semente{semNrId: $semNrId, semTxNome: $semTxNome, semNrQuantidade: $semNrQuantidade, '
         'semTxDescricao: $semTxDescricao, semDtCreatedAt: $semDtCreatedAt, '
         'semDtUpdateAt: $semDtUpdateAt, semBlAtivo: $semBlAtivo, armNrId: $armNrId}';
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'semTxNome': semTxNome,
+      'semNrQuantidade': semNrQuantidade,
+      'semTxDescricao': semTxDescricao,
+      'armNrId': armNrId,
+    };
   }
 }

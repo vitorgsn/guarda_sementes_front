@@ -15,4 +15,14 @@ class ArmazemController with ChangeNotifier {
       print('Error fetching todos: $e');
     }
   }
+
+  Future<void> criarArmazem(Armazem armazem) async {
+    try {
+      final novoArmazem = await _armazemService.criarArmazem(armazem);
+      _armazens.add(novoArmazem!);
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

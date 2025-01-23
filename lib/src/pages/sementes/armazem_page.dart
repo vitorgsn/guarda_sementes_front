@@ -91,14 +91,18 @@ class _ArmazemPageState extends State<ArmazemPage> {
           onTap: () async {
             final sementeController =
                 Provider.of<SementeController>(context, listen: false);
-            await sementeController
-                .listarSementes(filtros: {'armazemId': armazem.armNrId});
+            await sementeController.listarSementes(filtros: {
+              'size': 10,
+              'page': 0,
+              'sort': 'sem_nr_id,desc',
+              'armazemId': armazem.armNrId,
+            });
 
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => SementePage(
-                  armNrId: armazem.armNrId,
+                  armNrId: armazem.armNrId!,
                   armTxDescricao: armazem.armTxDescricao,
                 ),
               ),

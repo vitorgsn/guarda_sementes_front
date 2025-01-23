@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -32,6 +33,33 @@ class ArmazemService {
       return armanesJson.map((armazem) => Armazem.fromJson(armazem)).toList();
     } else {
       throw Exception('Falha ao carregar armazens');
+    }
+  }
+
+  Future<Armazem?> criarArmazem(Armazem armazem) async {
+    try {
+      token = (await _storage.read(key: 'token'))!;
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      final uri = Uri.parse(baseUrl);
+
+      final response = await http.post(uri,
+          headers: headers, body: json.encode(armazem.toJson()));
+
+      if (response.statusCode == 201) {
+        return Armazem.fromJson(json.decode(response.body));
+      } else {
+        throw (response.body);
+      }
+    } on http.ClientException {
+      throw 'Servidor offline. Tente novamente mais tarde.';
+    } on TimeoutException {
+      throw 'Tempo de espera da conexão excedido. Tente novamente.';
+    } catch (e) {
+      throw ('Erro ao processar, contate o suporte');
     }
   }
 }

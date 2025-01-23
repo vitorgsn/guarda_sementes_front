@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:guarda_sementes_front/src/controllers/sementes/semente_controller.dart';
+import 'package:guarda_sementes_front/src/models/sementes/semente.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class SementeFormPage extends StatefulWidget {
-  const SementeFormPage({super.key});
+  final int armNrId;
+  const SementeFormPage({
+    super.key,
+    required this.armNrId,
+  });
 
   @override
   State<SementeFormPage> createState() => _SementeFormPageState();
@@ -14,6 +21,7 @@ class _SementeFormPageState extends State<SementeFormPage> {
   File? _imagem;
   final _nomeController = TextEditingController();
   final _quantidadeController = TextEditingController();
+  final _descricaoController = TextEditingController();
 
   Future<void> _pickImage(ImageSource source) async {
     final picker = ImagePicker();
@@ -85,11 +93,17 @@ class _SementeFormPageState extends State<SementeFormPage> {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, insira a quantidade';
                   }
-                  if (int.tryParse(value) == null) {
+                  if (double.tryParse(value) == null ||
+                      double.tryParse(value)! < 0) {
                     return 'Insira um número válido';
                   }
                   return null;
                 },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _descricaoController,
+                decoration: const InputDecoration(labelText: 'Descrição'),
               ),
               const SizedBox(height: 16),
               Row(
@@ -98,11 +112,34 @@ class _SementeFormPageState extends State<SementeFormPage> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        Navigator.pop(context, {
-                          'imagem': _imagem?.path ?? '',
-                          'nome': _nomeController.text,
-                          'quantidade': int.parse(_quantidadeController.text),
-                        });
+                        try {
+                          context.read<SementeController>().criarSemente(
+                                Semente(
+                                  semTxNome: _nomeController.text,
+                                  semNrQuantidade:
+                                      double.parse(_quantidadeController.text),
+                                  semTxDescricao: _descricaoController.text,
+                                  armNrId: widget.armNrId,
+                                ),
+                              );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: Colors.greenAccent,
+                              content: Text(
+                                'Semente criada com sucesso!',
+                                textAlign: TextAlign.center,
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+
+                          Navigator.of(context).pop();
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text('Erro ao criar semente: $e')),
+                          );
+                        }
                       }
                     },
                     child: const Text('Salvar'),

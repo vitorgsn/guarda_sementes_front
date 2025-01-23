@@ -28,8 +28,10 @@ class _SementePageState extends State<SementePage> {
   Future<void> _carregarSementes() async {
     final sementeController =
         Provider.of<SementeController>(context, listen: false);
-    await sementeController
-        .listarSementes(filtros: {'armNrId': widget.armNrId});
+    await sementeController.listarSementes(filtros: {
+      'sort': 'sem_nr_id,desc',
+      'armNrId': widget.armNrId,
+    });
   }
 
   @override
@@ -45,16 +47,16 @@ class _SementePageState extends State<SementePage> {
           : _buildList(sementeController),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final novaSemente = await Navigator.push<Map<String, dynamic>>(
+          await Navigator.push<Map<String, dynamic>>(
             context,
             MaterialPageRoute(
-              builder: (context) => const SementeFormPage(),
+              builder: (context) => SementeFormPage(
+                armNrId: widget.armNrId,
+              ),
             ),
           );
 
-          if (novaSemente != null) {
-            _carregarSementes();
-          }
+          _carregarSementes();
         },
         child: const Icon(Icons.add),
       ),

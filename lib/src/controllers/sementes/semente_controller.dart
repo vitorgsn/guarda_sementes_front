@@ -14,7 +14,17 @@ class SementeController with ChangeNotifier {
       _sementes = await _sementeService.listarSementes(filtros: filtros);
       notifyListeners();
     } catch (e) {
-      print('Error fetching todos: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> criarSemente(Semente semente) async {
+    try {
+      final novaSemente = await _sementeService.criarSemente(semente);
+      _sementes.add(novaSemente!);
+      notifyListeners();
+    } catch (e) {
+      rethrow;
     }
   }
 }
