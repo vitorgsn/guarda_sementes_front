@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:guarda_sementes_front/src/pages/perfil/perfil_page.dart';
-import 'package:guarda_sementes_front/src/pages/guardioes/guardiao_page.dart';
-import 'package:guarda_sementes_front/src/pages/sementes/armazem_page.dart';
-import 'package:guarda_sementes_front/src/pages/sementes/sementes_disponiveis_troca_page.dart';
-import 'package:guarda_sementes_front/src/pages/trocas/trocas_page.dart';
+import 'package:guarda_sementes_front/src/pages/armazem/armazem_page.dart';
+import 'package:guarda_sementes_front/src/pages/semente/sementes_disponiveis_troca_page.dart';
+import 'package:guarda_sementes_front/src/pages/troca/trocas_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,7 +29,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    Theme.of(context);
     return Scaffold(
       body: PageView(
         controller: pc,
@@ -38,7 +37,6 @@ class _HomePageState extends State<HomePage> {
         children: const [
           SementesDisponiveisTrocaPage(),
           TrocasPage(),
-          GuardiaoPage(),
           ArmazemPage(),
           PerfilPage()
         ],
@@ -77,20 +75,6 @@ class _HomePageState extends State<HomePage> {
               size: 60,
             ),
             label: 'Trocas',
-          ),
-          NavigationDestination(
-            icon: Badge(
-              isLabelVisible: false,
-              child: Icon(
-                Icons.supervised_user_circle_outlined,
-                size: 40,
-              ),
-            ),
-            selectedIcon: Icon(
-              Icons.supervised_user_circle,
-              size: 60,
-            ),
-            label: 'Guardiões',
           ),
           NavigationDestination(
             icon: Badge(

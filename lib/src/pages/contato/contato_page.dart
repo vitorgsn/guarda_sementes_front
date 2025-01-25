@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guarda_sementes_front/src/pages/perfil/form/contato_form_page.dart';
+import 'package:guarda_sementes_front/src/pages/contato/contato_form_page.dart';
 import 'contato_detalhe_page.dart';
 
 class ContatoPage extends StatefulWidget {

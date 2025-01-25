@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:guarda_sementes_front/src/controllers/sementes/semente_controller.dart';
-import 'package:guarda_sementes_front/src/models/sementes/semente.dart';
+import 'package:guarda_sementes_front/src/controllers/semente_controller.dart';
+import 'package:guarda_sementes_front/src/models/semente.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';

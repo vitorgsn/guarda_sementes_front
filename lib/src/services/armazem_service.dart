@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:guarda_sementes_front/src/models/sementes/armazem.dart';
+import 'package:guarda_sementes_front/src/models/armazem.dart';
 import 'package:http/http.dart' as http;
 
 class ArmazemService {
@@ -32,7 +32,7 @@ class ArmazemService {
       List<dynamic> armanesJson = jsonResponse['content'];
       return armanesJson.map((armazem) => Armazem.fromJson(armazem)).toList();
     } else {
-      throw Exception('Falha ao carregar armazens');
+      throw Exception('Falha ao carregar armazéns');
     }
   }
 

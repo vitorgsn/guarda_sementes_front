@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:guarda_sementes_front/src/controllers/sementes/armazem_controller.dart';
-import 'package:guarda_sementes_front/src/models/sementes/armazem.dart';
+import 'package:guarda_sementes_front/src/controllers/armazem_controller.dart';
+import 'package:guarda_sementes_front/src/models/armazem.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -116,7 +116,7 @@ class _ArmazemFormPageState extends State<ArmazemFormPage> {
                             const SnackBar(
                               backgroundColor: Colors.greenAccent,
                               content: Text(
-                                'Armazén criado com sucesso!',
+                                'Armazém criado com sucesso!',
                                 textAlign: TextAlign.center,
                               ),
                               behavior: SnackBarBehavior.floating,
@@ -126,8 +126,8 @@ class _ArmazemFormPageState extends State<ArmazemFormPage> {
                           Navigator.of(context).pop();
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Text('Erro ao criar Armázem: $e')),
+                            const SnackBar(
+                                content: Text('Erro ao criar Armázem')),
                           );
                         }
                       }

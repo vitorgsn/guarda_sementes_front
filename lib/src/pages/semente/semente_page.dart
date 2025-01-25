@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:guarda_sementes_front/src/controllers/sementes/semente_controller.dart';
-import 'package:guarda_sementes_front/src/pages/sementes/form/semente_form_page.dart';
-import 'package:guarda_sementes_front/src/pages/sementes/semente_detalhe_page.dart';
+import 'package:guarda_sementes_front/src/controllers/semente_controller.dart';
+import 'package:guarda_sementes_front/src/pages/semente/semente_form_page.dart';
+import 'package:guarda_sementes_front/src/pages/semente/semente_detalhe_page.dart';
 import 'package:provider/provider.dart';
 
 class SementePage extends StatefulWidget {
@@ -58,6 +58,7 @@ class _SementePageState extends State<SementePage> {
 
           _carregarSementes();
         },
+        backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
     );

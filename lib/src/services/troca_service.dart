@@ -2,15 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:guarda_sementes_front/src/models/sementes/semente.dart';
+import 'package:guarda_sementes_front/src/models/troca.dart';
 import 'package:http/http.dart' as http;
 
-class SementeService {
-  final String baseUrl = 'http://191.7.87.244:19999/api/sementes';
+class TrocaService {
+  final String baseUrl = 'http://191.7.87.244:19999/api/trocas';
   var token = '';
   final _storage = const FlutterSecureStorage();
 
-  Future<List<Semente>> listarSementes({Map<String, dynamic>? filtros}) async {
+  Future<List<Troca>> listarTrocas({Map<String, dynamic>? filtros}) async {
     try {
       token = (await _storage.read(key: 'token'))!;
       final headers = {
@@ -29,10 +29,8 @@ class SementeService {
       if (response.statusCode == 200) {
         String responseBody = utf8.decode(response.bodyBytes);
         Map<String, dynamic> jsonResponse = json.decode(responseBody);
-        List<dynamic> sementesJson = jsonResponse['content'];
-        return sementesJson
-            .map((semente) => Semente.fromJson(semente))
-            .toList();
+        List<dynamic> trocasJson = jsonResponse['content'];
+        return trocasJson.map((troca) => Troca.fromJson(troca)).toList();
       } else {
         throw (response.body);
       }
@@ -45,7 +43,7 @@ class SementeService {
     }
   }
 
-  Future<Semente?> criarSemente(Semente semente) async {
+  Future<Troca?> criarTroca(Troca troca) async {
     try {
       token = (await _storage.read(key: 'token'))!;
       final headers = {
@@ -56,10 +54,10 @@ class SementeService {
       final uri = Uri.parse(baseUrl);
 
       final response = await http.post(uri,
-          headers: headers, body: json.encode(semente.toJson()));
+          headers: headers, body: json.encode(troca.toJson()));
 
       if (response.statusCode == 201) {
-        return Semente.fromJson(json.decode(response.body));
+        return Troca.fromJson(json.decode(response.body));
       } else {
         throw (response.body);
       }

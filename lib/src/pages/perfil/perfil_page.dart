@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:guarda_sementes_front/src/controllers/authentication_controller.dart';
-import 'package:guarda_sementes_front/src/pages/perfil/contato_page.dart';
-import 'package:guarda_sementes_front/src/pages/perfil/endereco_page.dart';
+import 'package:guarda_sementes_front/src/controllers/usuario_controller.dart';
+import 'package:guarda_sementes_front/src/pages/contato/contato_page.dart';
+import 'package:guarda_sementes_front/src/pages/endereco/endereco_page.dart';
+import 'package:provider/provider.dart';
 
 class PerfilPage extends StatefulWidget {
   const PerfilPage({super.key});
@@ -15,7 +17,21 @@ class _PerfilPageState extends State<PerfilPage> {
       AuthenticationController();
 
   @override
+  void initState() {
+    super.initState();
+    _getUsuario();
+  }
+
+  Future<void> _getUsuario() async {
+    final usuarioController =
+        Provider.of<UsuarioController>(context, listen: false);
+    await usuarioController.getUsuario();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final usuarioController = Provider.of<UsuarioController>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('PERFIL'),
@@ -30,49 +46,36 @@ class _PerfilPageState extends State<PerfilPage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Foto de Perfil
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 80,
-                  backgroundImage: AssetImage('assets/profile_picture.png'),
+                  backgroundColor: Colors.green, // Cor de fundo do avatar
+                  child: usuarioController.usuario?.usuTxNome != null &&
+                          usuarioController.usuario!.usuTxNome.isNotEmpty
+                      ? Text(
+                          usuarioController.usuario!.usuTxNome[0].toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Icon(
+                          Icons.person,
+                          size: 40,
+                          color: Colors.white, // Ícone padrão
+                        ),
                 ),
                 const SizedBox(height: 16),
-
-                // Nome do usuário
-                const Text(
-                  'Nome do Usuário',
-                  style: TextStyle(
-                    fontSize: 28,
+                Text(
+                  usuarioController.usuario?.usuTxNome ?? 'Carregando...',
+                  style: const TextStyle(
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
-
-                // Email ou outros detalhes
-                const Text(
-                  'email@dominio.com',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.grey,
-                  ),
-                ),
-                const SizedBox(height: 32),
-
-                // Botão para editar perfil
+                const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
-                    // Lógica para editar perfil
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 48),
-                  ),
-                  child: const Text('Editar Perfil'),
-                ),
-                const SizedBox(height: 16),
-
-                // Botão para lista de endereços
-                ElevatedButton(
-                  onPressed: () {
-                    // Navegar para a página de endereços
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -83,14 +86,16 @@ class _PerfilPageState extends State<PerfilPage> {
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 48),
                   ),
-                  child: const Text('Ver Endereços'),
+                  child: const Text(
+                    'Endereços',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
-
-                // Botão para lista de contatos
                 ElevatedButton(
                   onPressed: () {
-                    // Navegar para a página de contatos
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -101,10 +106,14 @@ class _PerfilPageState extends State<PerfilPage> {
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 48),
                   ),
-                  child: const Text('Ver Contatos'),
+                  child: const Text(
+                    'Contatos',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
-                // Botão para lista de contatos
                 ElevatedButton(
                   onPressed: () async {
                     try {
@@ -123,7 +132,12 @@ class _PerfilPageState extends State<PerfilPage> {
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 48),
                   ),
-                  child: const Text('Sair'),
+                  child: const Text(
+                    'Sair',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
               ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:guarda_sementes_front/src/pages/perfil/endereco_detalhe_page.dart';
-import 'package:guarda_sementes_front/src/pages/sementes/form/endereco_form_page.dart';
+import 'package:guarda_sementes_front/src/pages/endereco/endereco_detalhe_page.dart';
+import 'package:guarda_sementes_front/src/pages/endereco/endereco_form_page.dart';
 
 class EnderecoPage extends StatefulWidget {
   const EnderecoPage({super.key});

@@ -1,32 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:guarda_sementes_front/src/models/semente_disponivel_troca_model.dart';
+import 'package:flutter/foundation.dart';
+import 'package:guarda_sementes_front/src/models/semente_disponivel_troca.dart';
 import 'package:guarda_sementes_front/src/services/semente_disponivel_troca_service.dart';
 
-class SementeDisponivelTrocaController extends ChangeNotifier {
-  final SementeDisponivelTrocaService _sementeDisponivelTrocaService =
+class SementeDisponivelTrocaController with ChangeNotifier {
+  final SementeDisponivelTrocaService _sementeService =
       SementeDisponivelTrocaService();
-  List<SementeDisponivelTrocaModel> _sementes = [];
-  bool _isLoading = false;
-  String _errorMessage = '';
+  List<SementeDisponivelTroca> _sementes = [];
+  List<SementeDisponivelTroca> get sementes => _sementes;
 
-  List<SementeDisponivelTrocaModel> get sementes => _sementes;
-  bool get isLoading => _isLoading;
-  String get errorMessage => _errorMessage;
-
-  // Método para buscar as sementes
-  Future<void> listarSementesDisponiveisParaTroca() async {
-    _isLoading = true;
-    notifyListeners(); // Notifica que o estado mudou (carregamento)
-
+  Future<void> listarSementesDisponiveisTroca(
+      {Map<String, dynamic>? filtros}) async {
     try {
-      _sementes = await _sementeDisponivelTrocaService
-          .listarSementesDisponiveisParaTroca();
-      _errorMessage = ''; // Limpa a mensagem de erro, se houver
+      _sementes = [];
+      notifyListeners();
+      _sementes = await _sementeService.listarSementesDisponiveisTroca(
+          filtros: filtros);
+      notifyListeners();
     } catch (e) {
-      _errorMessage = e.toString(); // Armazena a mensagem de erro
+      rethrow;
     }
-
-    _isLoading = false;
-    notifyListeners(); // Notifica que o carregamento foi concluído
   }
 }

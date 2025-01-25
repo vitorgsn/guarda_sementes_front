@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:guarda_sementes_front/src/models/sementes/semente.dart';
-import 'package:guarda_sementes_front/src/services/sementes/semente_service.dart';
+import 'package:guarda_sementes_front/src/models/semente.dart';
+import 'package:guarda_sementes_front/src/services/semente_service.dart';
 
 class SementeController with ChangeNotifier {
   final SementeService _sementeService = SementeService();

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:guarda_sementes_front/src/controllers/sementes/armazem_controller.dart';
-import 'package:guarda_sementes_front/src/controllers/sementes/semente_controller.dart';
-import 'package:guarda_sementes_front/src/pages/sementes/form/armazem_form_page.dart';
-import 'package:guarda_sementes_front/src/pages/sementes/semente_page.dart';
+import 'package:guarda_sementes_front/src/controllers/armazem_controller.dart';
+import 'package:guarda_sementes_front/src/pages/armazem/armazem_form_page.dart';
+import 'package:guarda_sementes_front/src/pages/semente/semente_page.dart';
 import 'package:provider/provider.dart';
 
 class ArmazemPage extends StatefulWidget {
@@ -22,7 +21,9 @@ class _ArmazemPageState extends State<ArmazemPage> {
   Future<void> _carregarArmazens() async {
     final armazemController =
         Provider.of<ArmazemController>(context, listen: false);
-    await armazemController.listarArmazens();
+    if (armazemController.armazens.isEmpty) {
+      await armazemController.listarArmazens();
+    }
   }
 
   @override
@@ -37,26 +38,7 @@ class _ArmazemPageState extends State<ArmazemPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: armazemController.armazens.isEmpty
-            ? FutureBuilder(
-                future: armazemController.listarArmazens(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        'Erro ao carregar armazéns: ${snapshot.error}',
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                    );
-                  } else if (armazemController.armazens.isEmpty) {
-                    return const Center(
-                      child: Text('Nenhum armazém encontrado.'),
-                    );
-                  }
-                  return _buildList(armazemController);
-                },
-              )
+            ? const Center(child: CircularProgressIndicator())
             : _buildList(armazemController),
       ),
       floatingActionButton: FloatingActionButton(
@@ -72,6 +54,7 @@ class _ArmazemPageState extends State<ArmazemPage> {
             _carregarArmazens();
           }
         },
+        backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
     );
@@ -89,15 +72,6 @@ class _ArmazemPageState extends State<ArmazemPage> {
         final armazem = controller.armazens[index];
         return GestureDetector(
           onTap: () async {
-            final sementeController =
-                Provider.of<SementeController>(context, listen: false);
-            await sementeController.listarSementes(filtros: {
-              'size': 10,
-              'page': 0,
-              'sort': 'sem_nr_id,desc',
-              'armazemId': armazem.armNrId,
-            });
-
             Navigator.push(
               context,
               MaterialPageRoute(

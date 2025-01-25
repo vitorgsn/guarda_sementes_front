@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:guarda_sementes_front/src/models/sementes/armazem.dart';
-import 'package:guarda_sementes_front/src/services/sementes/armazem_service.dart';
+import 'package:guarda_sementes_front/src/models/armazem.dart';
+import 'package:guarda_sementes_front/src/services/armazem_service.dart';
 
 class ArmazemController with ChangeNotifier {
   final ArmazemService _armazemService = ArmazemService();
@@ -12,7 +12,7 @@ class ArmazemController with ChangeNotifier {
       _armazens = await _armazemService.listarArmazens(filtros: filtros);
       notifyListeners();
     } catch (e) {
-      print('Error fetching todos: $e');
+      print('Erro ao listar os armazéns');
     }
   }
 
