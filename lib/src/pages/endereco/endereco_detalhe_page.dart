@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
 
-class EnderecoDetalhePage extends StatelessWidget {
-  final String siglaEstado;
-  final String nomeEstado;
-  final String cidade;
-  final String bairro;
-  final String logradouro;
-  final String numero;
-  final String referencia;
+class EnderecoDetalhePage extends StatefulWidget {
+  final int endNrId;
+  final String endTxBairro;
+  final String endTxLogradouro;
+  final String endTxNumero;
+  final String endTxReferencia;
+  final int cidNrId;
+  final String endDtCreatedAt;
+  final String endDtUpdateAt;
+  final bool endBlEnderecoPadrao;
 
-  const EnderecoDetalhePage({
-    super.key,
-    required this.siglaEstado,
-    required this.nomeEstado,
-    required this.cidade,
-    required this.bairro,
-    required this.logradouro,
-    required this.numero,
-    required this.referencia,
-  });
+  const EnderecoDetalhePage(
+      {super.key,
+      required this.endNrId,
+      required this.endTxBairro,
+      required this.endTxLogradouro,
+      required this.endTxNumero,
+      required this.endTxReferencia,
+      required this.cidNrId,
+      required this.endDtCreatedAt,
+      required this.endDtUpdateAt,
+      required this.endBlEnderecoPadrao});
 
+  @override
+  State<EnderecoDetalhePage> createState() => _EnderecoDetalhePageState();
+}
+
+class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,22 +39,40 @@ class EnderecoDetalhePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Estado: $nomeEstado ($siglaEstado)',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            const Text(
+              'Estado: São Paulo (SP)',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            Text('Cidade: $cidade', style: const TextStyle(fontSize: 18)),
-            const SizedBox(height: 16),
-            Text('Bairro: $bairro', style: const TextStyle(fontSize: 18)),
-            const SizedBox(height: 16),
-            Text('Logradouro: $logradouro',
+            Text('Cidade: ${widget.cidNrId}',
                 style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 16),
-            Text('Número: $numero', style: const TextStyle(fontSize: 18)),
-            const SizedBox(height: 16),
-            Text('Referência: $referencia',
+            Text('Bairro: ${widget.endTxBairro}',
                 style: const TextStyle(fontSize: 18)),
+            const SizedBox(height: 16),
+            Text('Logradouro: ${widget.endTxLogradouro}',
+                style: const TextStyle(fontSize: 18)),
+            const SizedBox(height: 16),
+            Text('Número: ${widget.endTxNumero}',
+                style: const TextStyle(fontSize: 18)),
+            const SizedBox(height: 16),
+            Text('Referência: ${widget.endTxReferencia}',
+                style: const TextStyle(fontSize: 18)),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Checkbox(
+                  value: widget.endBlEnderecoPadrao,
+                  onChanged: (bool? value) {
+                    // Lógica para atualizar o estado do endereço padrão
+                  },
+                ),
+                const Text(
+                  'Endereço Padrão',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
           ],
         ),
       ),

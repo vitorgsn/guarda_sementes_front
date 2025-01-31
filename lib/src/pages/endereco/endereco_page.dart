@@ -10,34 +10,40 @@ class EnderecoPage extends StatefulWidget {
 }
 
 class _EnderecoPageState extends State<EnderecoPage> {
-  // Lista simulada de endereços
-  final List<Map<String, String>> enderecos = [
+  // Lista simulada de endereços, com base no DTO fornecido
+  final List<Map<String, dynamic>> enderecos = [
     {
-      'siglaEstado': 'SP',
-      'nomeEstado': 'São Paulo',
-      'cidade': 'São Paulo',
-      'bairro': 'Centro',
-      'logradouro': 'Rua A',
-      'numero': '123',
-      'referencia': 'Próximo ao mercado'
+      'endNrId': 6,
+      'endTxBairro': 'Matadouro',
+      'endTxLogradouro': 'Rua do Matadouro',
+      'endTxNumero': '25',
+      'endTxReferencia': 'Próx. ao Matadouro',
+      'cidNrId': 2,
+      'endDtCreatedAt': '2025-01-30T21:53:30.102961',
+      'endDtUpdateAt': '2025-01-30T21:53:30.102979',
+      'endBlEnderecoPadrao': true,
     },
     {
-      'siglaEstado': 'RJ',
-      'nomeEstado': 'Rio de Janeiro',
-      'cidade': 'Rio de Janeiro',
-      'bairro': 'Copacabana',
-      'logradouro': 'Avenida Atlântica',
-      'numero': '456',
-      'referencia': 'Frente à praia'
+      'endNrId': 5,
+      'endTxBairro': 'Centro',
+      'endTxLogradouro': 'Rua 2',
+      'endTxNumero': '2',
+      'endTxReferencia': 'Próx. a Praça',
+      'cidNrId': 1,
+      'endDtCreatedAt': '2025-01-30T21:47:39.053063',
+      'endDtUpdateAt': '2025-01-30T21:51:25.772012',
+      'endBlEnderecoPadrao': false,
     },
     {
-      'siglaEstado': 'MG',
-      'nomeEstado': 'Minas Gerais',
-      'cidade': 'Belo Horizonte',
-      'bairro': 'Savassi',
-      'logradouro': 'Rua B',
-      'numero': '789',
-      'referencia': 'Perto da praça'
+      'endNrId': 4,
+      'endTxBairro': 'Loiola',
+      'endTxLogradouro': 'Rua 10',
+      'endTxNumero': '20',
+      'endTxReferencia': 'Próx. ao Estádio',
+      'cidNrId': 1,
+      'endDtCreatedAt': '2025-01-30T21:46:37.321691',
+      'endDtUpdateAt': '2025-01-30T21:53:30.104696',
+      'endBlEnderecoPadrao': false,
     },
   ];
 
@@ -62,24 +68,32 @@ class _EnderecoPageState extends State<EnderecoPage> {
               elevation: 3,
               child: ListTile(
                 contentPadding: const EdgeInsets.all(16.0),
-                title: Text(
-                  '${endereco['logradouro']}, ${endereco['numero']}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                title: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '${endereco['endTxLogradouro']}, ${endereco['endTxNumero']}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    if (endereco['endBlEnderecoPadrao'] == true)
+                      const Icon(Icons.star, color: Colors.amber),
+                  ],
                 ),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 4),
                     Text(
-                      '${endereco['bairro']} - ${endereco['cidade']} (${endereco['siglaEstado']})',
+                      '${endereco['endTxBairro']} - Cidade ID: ${endereco['cidNrId']}',
                       style: const TextStyle(fontSize: 14),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Referência: ${endereco['referencia']}',
+                      'Referência: ${endereco['endTxReferencia']}',
                       style: const TextStyle(color: Colors.grey),
                     ),
                   ],
@@ -91,13 +105,15 @@ class _EnderecoPageState extends State<EnderecoPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => EnderecoDetalhePage(
-                        siglaEstado: endereco['siglaEstado']!,
-                        nomeEstado: endereco['nomeEstado']!,
-                        cidade: endereco['cidade']!,
-                        bairro: endereco['bairro']!,
-                        logradouro: endereco['logradouro']!,
-                        numero: endereco['numero']!,
-                        referencia: endereco['referencia']!,
+                        endNrId: endereco['endNrId']!,
+                        endTxBairro: endereco['endTxBairro']!,
+                        endTxLogradouro: endereco['endTxLogradouro']!,
+                        endTxNumero: endereco['endTxNumero']!,
+                        endTxReferencia: endereco['endTxReferencia']!,
+                        cidNrId: endereco['cidNrId']!,
+                        endDtCreatedAt: endereco['endDtCreatedAt']!,
+                        endDtUpdateAt: endereco['endDtUpdateAt']!,
+                        endBlEnderecoPadrao: endereco['endBlEnderecoPadrao']!,
                       ),
                     ),
                   );
