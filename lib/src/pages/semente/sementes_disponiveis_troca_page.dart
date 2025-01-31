@@ -42,6 +42,7 @@ class _SementesDisponiveisTrocaPageState
       appBar: AppBar(
         title: const Text('FEIRA DE TROCAS'),
         automaticallyImplyLeading: false,
+        backgroundColor: Colors.green,
       ),
       body: Column(
         children: [
@@ -78,77 +79,91 @@ class _SementesDisponiveisTrocaPageState
             ),
           ),
           Expanded(
-            child: ListView.separated(
-              itemBuilder: (BuildContext context, int index) {
-                final semente = listaFiltrada[index];
-                return ListTile(
-                  leading: SizedBox(
-                    width: 60,
-                    height: 60,
-                    child: ClipOval(
-                      child: Image.asset(
-                        semente.icone,
-                        fit: BoxFit.cover,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView.builder(
+                itemBuilder: (BuildContext context, int index) {
+                  final semente = listaFiltrada[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EscolherSementeTrocaPage(
+                            sementeSelecionada:
+                                semente, // Passar a semente clicada para a nova página
+                          ),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            12), // Card com bordas mais arredondadas
                       ),
-                    ),
-                  ),
-                  title: Text(
-                    semente.semTxNome,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${semente.cidTxNome} - ${semente.estTxSigla}',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0), // Padding reduzido
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            ClipOval(
+                              child: Container(
+                                width: 70, // Aumento do tamanho da imagem
+                                height: 70,
+                                color: Colors.green[100],
+                                child: const Icon(
+                                  Icons.grain,
+                                  color: Colors.green,
+                                  size: 48, // Ícone maior
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              semente.semTxNome,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '${semente.cidTxNome} - ${semente.estTxSigla}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              semente.sdtTxObservacoes,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '${semente.sdtNrQuantidade} kg',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.green,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        semente.sdtTxObservacoes,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  trailing: Text(
-                    '${semente.sdtNrQuantidade} kg',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
                     ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EscolherSementeTrocaPage(
-                          sementeSelecionada:
-                              semente, // Passar a semente clicada para a nova página
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-              padding: const EdgeInsets.all(16),
-              separatorBuilder: (_, __) => const Divider(
-                color: Colors.grey,
-                thickness: 1,
-                indent: 20,
-                endIndent: 20,
+                  );
+                },
+                itemCount: listaFiltrada.length,
               ),
-              itemCount: listaFiltrada.length,
             ),
           ),
         ],

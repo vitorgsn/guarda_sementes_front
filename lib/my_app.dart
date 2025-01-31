@@ -2,23 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guarda_sementes_front/src/pages/login/login_page.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(Object context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: const Color.fromRGBO(76, 175, 80, 0.8), // Cor primária
-          secondary: Colors.white, // Cor secundária, se necessário
+          primary: const Color.fromRGBO(76, 175, 80, 0.8),
+          secondary: Colors.white,
         ),
         navigationBarTheme: NavigationBarThemeData(
           height: 100,
           backgroundColor: const Color.fromRGBO(76, 175, 80, 0.8),
-          indicatorColor:
-              Colors.transparent, // Cor do indicador do item selecionado
+          indicatorColor: Colors.transparent,
           labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
             (Set<WidgetState> states) {
               if (states.contains(WidgetState.selected)) {

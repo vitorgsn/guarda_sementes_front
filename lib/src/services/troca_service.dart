@@ -6,7 +6,7 @@ import 'package:guarda_sementes_front/src/models/troca.dart';
 import 'package:http/http.dart' as http;
 
 class TrocaService {
-  final String baseUrl = 'http://191.7.87.244:19999/api/trocas';
+  final String baseUrl = 'http://localhost:5786/api/trocas';
   var token = '';
   final _storage = const FlutterSecureStorage();
 

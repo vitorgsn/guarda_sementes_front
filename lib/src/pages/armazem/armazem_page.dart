@@ -39,9 +39,9 @@ class _ArmazemPageState extends State<ArmazemPage> {
         padding: const EdgeInsets.all(16.0),
         child: armazemController.armazens.isEmpty
             ? const Center(child: CircularProgressIndicator())
-            : _buildList(armazemController),
+            : _buildGrid(armazemController),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           final novoArmazem = await Navigator.push<Map<String, dynamic>>(
             context,
@@ -55,15 +55,16 @@ class _ArmazemPageState extends State<ArmazemPage> {
           }
         },
         backgroundColor: Colors.green,
-        child: const Icon(Icons.add),
+        icon: const Icon(Icons.add),
+        label: const Text('Novo Armazém'),
       ),
     );
   }
 
-  Widget _buildList(ArmazemController controller) {
+  Widget _buildGrid(ArmazemController controller) {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
+        crossAxisCount: 2,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
       ),
@@ -82,30 +83,42 @@ class _ArmazemPageState extends State<ArmazemPage> {
               ),
             );
           },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ClipOval(
-                child: Container(
-                  color: Colors.green[100],
-                  width: 80,
-                  height: 80,
-                  child: const Icon(
-                    Icons.grain,
-                    color: Colors.green,
+          child: Card(
+            elevation: 4,
+            shadowColor: Colors.grey[300],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipOval(
+                    child: Container(
+                      width: 80,
+                      height: 80,
+                      color: Colors.green[100],
+                      child: const Icon(
+                        Icons.warehouse,
+                        color: Colors.green,
+                        size: 40,
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  Text(
+                    armazem.armTxDescricao,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
-              Text(
-                armazem.armTxDescricao,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
+            ),
           ),
         );
       },

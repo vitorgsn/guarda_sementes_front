@@ -5,7 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/authentication_model.dart';
 
 class AuthenticationService {
-  final String baseUrl = 'http://191.7.87.244:19999/api/usuarios';
+  final String baseUrl = 'http://192.168.0.104:5786/api/usuarios';
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   Future<AuthenticationModel?> login(String usuario, String senha) async {
@@ -19,15 +19,15 @@ class AuthenticationService {
         body: json.encode({'login': usuario, 'senha': senha}),
       );
 
+      print(response.statusCode);
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final token = AuthenticationModel.fromJson(data);
         await _secureStorage.write(key: 'token', value: token.token);
         return token;
-      } else if (response.statusCode == 401) {
+      } else if (response.statusCode == 401 || response.statusCode == 500) {
         throw ('Usuário ou Senha incorretos.');
-      } else if (response.statusCode == 500) {
-        throw ('Erro ao autenticar, por favor, contate o suporte.');
       } else {
         throw ('Falha ao autenticar. Por favor, tente novamente mais tarde.');
       }

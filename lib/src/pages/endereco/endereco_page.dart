@@ -46,37 +46,66 @@ class _EnderecoPageState extends State<EnderecoPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Endereços'),
+        backgroundColor: Colors.green,
       ),
-      body: ListView.builder(
-        itemCount: enderecos.length,
-        itemBuilder: (context, index) {
-          final endereco = enderecos[index];
-          return ListTile(
-            title: Text(
-              '${endereco['logradouro']}, ${endereco['numero']}',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(
-                '${endereco['bairro']} - ${endereco['cidade']} (${endereco['siglaEstado']})'),
-            onTap: () {
-              // Navegar para a tela de detalhes do endereço
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnderecoDetalhePage(
-                    siglaEstado: endereco['siglaEstado']!,
-                    nomeEstado: endereco['nomeEstado']!,
-                    cidade: endereco['cidade']!,
-                    bairro: endereco['bairro']!,
-                    logradouro: endereco['logradouro']!,
-                    numero: endereco['numero']!,
-                    referencia: endereco['referencia']!,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.builder(
+          itemCount: enderecos.length,
+          itemBuilder: (context, index) {
+            final endereco = enderecos[index];
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              elevation: 3,
+              child: ListTile(
+                contentPadding: const EdgeInsets.all(16.0),
+                title: Text(
+                  '${endereco['logradouro']}, ${endereco['numero']}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
                 ),
-              );
-            },
-          );
-        },
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 4),
+                    Text(
+                      '${endereco['bairro']} - ${endereco['cidade']} (${endereco['siglaEstado']})',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Referência: ${endereco['referencia']}',
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 18),
+                onTap: () {
+                  // Navegar para a tela de detalhes do endereço
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EnderecoDetalhePage(
+                        siglaEstado: endereco['siglaEstado']!,
+                        nomeEstado: endereco['nomeEstado']!,
+                        cidade: endereco['cidade']!,
+                        bairro: endereco['bairro']!,
+                        logradouro: endereco['logradouro']!,
+                        numero: endereco['numero']!,
+                        referencia: endereco['referencia']!,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -88,6 +117,7 @@ class _EnderecoPageState extends State<EnderecoPage> {
             ),
           );
         },
+        backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
     );
