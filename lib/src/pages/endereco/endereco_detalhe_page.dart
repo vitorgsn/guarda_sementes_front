@@ -6,22 +6,27 @@ class EnderecoDetalhePage extends StatefulWidget {
   final String endTxLogradouro;
   final String endTxNumero;
   final String endTxReferencia;
-  final int cidNrId;
-  final String endDtCreatedAt;
-  final String endDtUpdateAt;
   final bool endBlEnderecoPadrao;
+  final int? cidNrId;
+  final String? cidTxNome;
+  final int? estNrId;
+  final String? estTxNome;
+  final String? estTxSigla;
 
-  const EnderecoDetalhePage(
-      {super.key,
-      required this.endNrId,
-      required this.endTxBairro,
-      required this.endTxLogradouro,
-      required this.endTxNumero,
-      required this.endTxReferencia,
-      required this.cidNrId,
-      required this.endDtCreatedAt,
-      required this.endDtUpdateAt,
-      required this.endBlEnderecoPadrao});
+  const EnderecoDetalhePage({
+    super.key,
+    required this.endNrId,
+    required this.endTxBairro,
+    required this.endTxLogradouro,
+    required this.endTxNumero,
+    required this.endTxReferencia,
+    required this.endBlEnderecoPadrao,
+    required this.cidNrId,
+    required this.cidTxNome,
+    required this.estNrId,
+    required this.estTxNome,
+    required this.estTxSigla,
+  });
 
   @override
   State<EnderecoDetalhePage> createState() => _EnderecoDetalhePageState();
@@ -39,12 +44,12 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Estado: São Paulo (SP)',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              'Estado: ${widget.estTxNome}/${widget.estTxSigla}',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            Text('Cidade: ${widget.cidNrId}',
+            Text('Cidade: ${widget.cidTxNome}',
                 style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 16),
             Text('Bairro: ${widget.endTxBairro}',
@@ -63,9 +68,7 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
               children: [
                 Checkbox(
                   value: widget.endBlEnderecoPadrao,
-                  onChanged: (bool? value) {
-                    // Lógica para atualizar o estado do endereço padrão
-                  },
+                  onChanged: (bool? value) {},
                 ),
                 const Text(
                   'Endereço Padrão',

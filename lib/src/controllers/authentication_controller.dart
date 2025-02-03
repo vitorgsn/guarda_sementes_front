@@ -10,7 +10,6 @@ class AuthenticationController extends ChangeNotifier {
   Future<void> login(String usuario, String senha) async {
     try {
       _authenticationModel = await _authenticationService.login(usuario, senha);
-      debugPrint(authenticationModel.toString());
       notifyListeners();
     } catch (e) {
       rethrow;

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:guarda_sementes_front/src/controllers/endereco_controller.dart';
+import 'package:guarda_sementes_front/src/controllers/cidade_controller.dart';
+import 'package:guarda_sementes_front/src/models/endereco.dart';
+import 'package:guarda_sementes_front/src/models/cidade.dart';
 
 class EnderecoFormPage extends StatefulWidget {
   const EnderecoFormPage({super.key});
@@ -8,139 +13,135 @@ class EnderecoFormPage extends StatefulWidget {
 }
 
 class _EnderecoFormPageState extends State<EnderecoFormPage> {
-  final TextEditingController _cidadeController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _bairroController = TextEditingController();
   final TextEditingController _logradouroController = TextEditingController();
   final TextEditingController _numeroController = TextEditingController();
   final TextEditingController _referenciaController = TextEditingController();
-  String? _nomeEstado;
-  String? _siglaEstado;
   bool _enderecoPadrao = false;
+  Cidade? _cidadeSelecionada;
+  Future<List<Cidade>>? _futureCidades;
 
-  Future<List<String>> _buscarCidades(String query) async {
-    List<String> cidades = [
-      "Lagarto - SE",
-      "Paripiranga - BA",
-      "Aracaju - SE",
-      "Salvador - BA"
-    ];
-    return cidades
-        .where((cidade) => cidade.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+  @override
+  void initState() {
+    super.initState();
+    _futureCidades = context.read<CidadeController>().listarCidades();
   }
 
-  void _selecionarCidade(String cidade) {
-    setState(() {
-      _cidadeController.text = cidade;
-      List<String> partes = cidade.split(" - ");
-      _nomeEstado = partes[1] == "SE" ? "Sergipe" : "Bahia";
-      _siglaEstado = partes[1];
-    });
+  @override
+  void dispose() {
+    _bairroController.dispose();
+    _logradouroController.dispose();
+    _numeroController.dispose();
+    _referenciaController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _salvarEndereco() async {
+    if (_formKey.currentState!.validate()) {
+      if (_cidadeSelecionada == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Selecione uma cidade!')),
+        );
+        return;
+      }
+
+      final endereco = Endereco(
+        endTxBairro: _bairroController.text,
+        endTxLogradouro: _logradouroController.text,
+        endTxNumero: _numeroController.text,
+        endTxReferencia: _referenciaController.text,
+        endBlEnderecoPadrao: _enderecoPadrao,
+        cidNrId: _cidadeSelecionada!.cidNrId,
+      );
+
+      try {
+        await Provider.of<EnderecoController>(context, listen: false)
+            .criarEndreco(endereco);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Endereço salvo com sucesso!')),
+        );
+
+        Navigator.pop(context);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao salvar endereço: $e')),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Adicionar Endereço'),
-      ),
+      appBar: AppBar(title: const Text('Cadastrar Endereço')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: TextEditingController(text: _nomeEstado),
-                      decoration: InputDecoration(
-                        labelText: 'Nome do Estado',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                      ),
-                      enabled: false,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: TextField(
-                      controller: TextEditingController(text: _siglaEstado),
-                      decoration: InputDecoration(
-                        labelText: 'Sigla',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                      ),
-                      enabled: false,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Autocomplete<String>(
-                optionsBuilder: (TextEditingValue textEditingValue) {
-                  return _buscarCidades(textEditingValue.text);
-                },
-                onSelected: (String selection) {
-                  _selecionarCidade(selection);
-                },
-                fieldViewBuilder: (
-                  BuildContext context,
-                  TextEditingController textEditingController,
-                  FocusNode focusNode,
-                  VoidCallback onFieldSubmitted,
-                ) {
-                  _cidadeController.text = textEditingController.text;
-                  return TextField(
-                    controller: textEditingController,
-                    focusNode: focusNode,
-                    decoration: InputDecoration(
-                      labelText: 'Cidade',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
+              FutureBuilder<List<Cidade>>(
+                future: _futureCidades,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return const Center(
+                        child: Text('Erro ao carregar cidades'));
+                  }
+                  final cidades = snapshot.data!;
+                  return DropdownButtonFormField<Cidade>(
+                    value: _cidadeSelecionada,
+                    hint: const Text('Selecione a cidade'),
+                    decoration: const InputDecoration(labelText: 'Cidade'),
+                    items: cidades.map((cidade) {
+                      return DropdownMenuItem(
+                        value: cidade,
+                        child:
+                            Text('${cidade.cidTxNome} - ${cidade.estTxSigla}'),
+                      );
+                    }).toList(),
+                    onChanged: (cidade) {
+                      setState(() {
+                        _cidadeSelecionada = cidade;
+                      });
+                    },
+                    validator: (value) =>
+                        value == null ? 'Selecione uma cidade' : null,
                   );
                 },
               ),
-              const SizedBox(height: 10),
-              TextField(
+              const SizedBox(height: 16),
+              TextFormField(
                 controller: _bairroController,
-                decoration: InputDecoration(
-                  labelText: 'Bairro',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                ),
+                decoration: const InputDecoration(labelText: 'Bairro'),
+                validator: (value) =>
+                    value!.isEmpty ? 'Informe o bairro' : null,
               ),
-              const SizedBox(height: 10),
-              TextField(
+              const SizedBox(height: 16),
+              TextFormField(
                 controller: _logradouroController,
-                decoration: InputDecoration(
-                  labelText: 'Logradouro',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                ),
+                decoration: const InputDecoration(labelText: 'Logradouro'),
+                validator: (value) =>
+                    value!.isEmpty ? 'Informe o logradouro' : null,
               ),
-              const SizedBox(height: 10),
-              TextField(
+              const SizedBox(height: 16),
+              TextFormField(
                 controller: _numeroController,
-                decoration: InputDecoration(
-                  labelText: 'Número',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(labelText: 'Número'),
+                validator: (value) =>
+                    value!.isEmpty ? 'Informe o número' : null,
               ),
-              const SizedBox(height: 10),
-              TextField(
+              const SizedBox(height: 16),
+              TextFormField(
                 controller: _referenciaController,
-                decoration: InputDecoration(
-                  labelText: 'Referência',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                ),
+                decoration: const InputDecoration(labelText: 'Referência'),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Checkbox(
@@ -151,44 +152,22 @@ class _EnderecoFormPageState extends State<EnderecoFormPage> {
                       });
                     },
                   ),
-                  const Text('Definir como endereço padrão')
+                  const Text('Endereço Padrão'),
                 ],
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Lógica para salvar o endereço
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    onPressed: _salvarEndereco,
+                    child: const Text('Salvar'),
                   ),
-                  backgroundColor: Colors.green,
-                ),
-                child: const Text(
-                  'Salvar',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Cancelar'),
                   ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text(
-                  'Cancelar',
-                  style: TextStyle(fontSize: 18, color: Colors.black87),
-                ),
+                ],
               ),
             ],
           ),

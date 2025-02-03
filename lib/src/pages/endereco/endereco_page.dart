@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:guarda_sementes_front/src/controllers/endereco_controller.dart';
 import 'package:guarda_sementes_front/src/pages/endereco/endereco_detalhe_page.dart';
 import 'package:guarda_sementes_front/src/pages/endereco/endereco_form_page.dart';
+import 'package:provider/provider.dart';
 
 class EnderecoPage extends StatefulWidget {
   const EnderecoPage({super.key});
@@ -10,45 +12,24 @@ class EnderecoPage extends StatefulWidget {
 }
 
 class _EnderecoPageState extends State<EnderecoPage> {
-  // Lista simulada de endereços, com base no DTO fornecido
-  final List<Map<String, dynamic>> enderecos = [
-    {
-      'endNrId': 6,
-      'endTxBairro': 'Matadouro',
-      'endTxLogradouro': 'Rua do Matadouro',
-      'endTxNumero': '25',
-      'endTxReferencia': 'Próx. ao Matadouro',
-      'cidNrId': 2,
-      'endDtCreatedAt': '2025-01-30T21:53:30.102961',
-      'endDtUpdateAt': '2025-01-30T21:53:30.102979',
-      'endBlEnderecoPadrao': true,
-    },
-    {
-      'endNrId': 5,
-      'endTxBairro': 'Centro',
-      'endTxLogradouro': 'Rua 2',
-      'endTxNumero': '2',
-      'endTxReferencia': 'Próx. a Praça',
-      'cidNrId': 1,
-      'endDtCreatedAt': '2025-01-30T21:47:39.053063',
-      'endDtUpdateAt': '2025-01-30T21:51:25.772012',
-      'endBlEnderecoPadrao': false,
-    },
-    {
-      'endNrId': 4,
-      'endTxBairro': 'Loiola',
-      'endTxLogradouro': 'Rua 10',
-      'endTxNumero': '20',
-      'endTxReferencia': 'Próx. ao Estádio',
-      'cidNrId': 1,
-      'endDtCreatedAt': '2025-01-30T21:46:37.321691',
-      'endDtUpdateAt': '2025-01-30T21:53:30.104696',
-      'endBlEnderecoPadrao': false,
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _carregarEnderecos();
+  }
+
+  Future<void> _carregarEnderecos() async {
+    final enderecoController =
+        Provider.of<EnderecoController>(context, listen: false);
+    await enderecoController.listarEnderecos(filtros: {
+      'sort': 'end_bl_endereco_padrao,desc',
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final enderecoController = Provider.of<EnderecoController>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Endereços'),
@@ -57,9 +38,9 @@ class _EnderecoPageState extends State<EnderecoPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView.builder(
-          itemCount: enderecos.length,
+          itemCount: enderecoController.enderecos.length,
           itemBuilder: (context, index) {
-            final endereco = enderecos[index];
+            final endereco = enderecoController.enderecos[index];
             return Card(
               margin: const EdgeInsets.symmetric(vertical: 8.0),
               shape: RoundedRectangleBorder(
@@ -72,14 +53,14 @@ class _EnderecoPageState extends State<EnderecoPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        '${endereco['endTxLogradouro']}, ${endereco['endTxNumero']}',
+                        '${endereco.endTxLogradouro}, ${endereco.endTxNumero}',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
                       ),
                     ),
-                    if (endereco['endBlEnderecoPadrao'] == true)
+                    if (endereco.endBlEnderecoPadrao == true)
                       const Icon(Icons.star, color: Colors.amber),
                   ],
                 ),
@@ -88,12 +69,12 @@ class _EnderecoPageState extends State<EnderecoPage> {
                   children: [
                     const SizedBox(height: 4),
                     Text(
-                      '${endereco['endTxBairro']} - Cidade ID: ${endereco['cidNrId']}',
+                      '${endereco.endTxBairro} - ${endereco.cidTxNome}/${endereco.estTxSigla}',
                       style: const TextStyle(fontSize: 14),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Referência: ${endereco['endTxReferencia']}',
+                      'Referência: ${endereco.endTxReferencia}',
                       style: const TextStyle(color: Colors.grey),
                     ),
                   ],
@@ -105,18 +86,23 @@ class _EnderecoPageState extends State<EnderecoPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => EnderecoDetalhePage(
-                        endNrId: endereco['endNrId']!,
-                        endTxBairro: endereco['endTxBairro']!,
-                        endTxLogradouro: endereco['endTxLogradouro']!,
-                        endTxNumero: endereco['endTxNumero']!,
-                        endTxReferencia: endereco['endTxReferencia']!,
-                        cidNrId: endereco['cidNrId']!,
-                        endDtCreatedAt: endereco['endDtCreatedAt']!,
-                        endDtUpdateAt: endereco['endDtUpdateAt']!,
-                        endBlEnderecoPadrao: endereco['endBlEnderecoPadrao']!,
+                        endNrId: endereco.endNrId!,
+                        endTxBairro: endereco.endTxBairro,
+                        endTxLogradouro: endereco.endTxLogradouro,
+                        endTxNumero: endereco.endTxNumero,
+                        endTxReferencia: endereco.endTxReferencia,
+                        endBlEnderecoPadrao: endereco.endBlEnderecoPadrao!,
+                        cidNrId: endereco.cidNrId,
+                        cidTxNome: endereco.cidTxNome,
+                        estNrId: endereco.estNrId,
+                        estTxNome: endereco.estTxNome,
+                        estTxSigla: endereco.estTxSigla,
                       ),
                     ),
-                  );
+                  ).then((_) {
+                    // Quando voltar da tela de detalhes, atualize os dados
+                    _carregarEnderecos();
+                  });
                 },
               ),
             );
@@ -125,13 +111,15 @@ class _EnderecoPageState extends State<EnderecoPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navegar para a tela de adicionar endereço
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const EnderecoFormPage(),
             ),
-          );
+          ).then((_) {
+            // Quando voltar da tela de formulário, atualize os dados
+            _carregarEnderecos();
+          });
         },
         backgroundColor: Colors.green,
         child: const Icon(Icons.add),
