@@ -12,11 +12,11 @@ class EnderecoController with ChangeNotifier {
       _enderecos = await _enderecoService.listarEnderecos(filtros: filtros);
       notifyListeners();
     } catch (e) {
-      print('Erro ao listar os endreços');
+      rethrow;
     }
   }
 
-  Future<void> criarEndreco(Endereco endereco) async {
+  Future<void> criarEndereco(Endereco endereco) async {
     try {
       final novoEndereco = await _enderecoService.criarEndereco(endereco);
       _enderecos.add(novoEndereco!);
@@ -42,22 +42,21 @@ class EnderecoController with ChangeNotifier {
 
   Future<Endereco?> buscarEnderecoPorId(int endNrId) async {
     try {
-      final enderecoAtualizado =
-          await _enderecoService.buscarEnderecoPorId(endNrId);
+      final endereco = await _enderecoService.buscarEnderecoPorId(endNrId);
 
-      if (enderecoAtualizado != null) {
+      if (endereco != null) {
         final index = _enderecos.indexWhere((e) => e.endNrId == endNrId);
 
         if (index != -1) {
-          _enderecos[index] = enderecoAtualizado;
+          _enderecos[index] = endereco;
         } else {
-          _enderecos.add(enderecoAtualizado);
+          _enderecos.add(endereco);
         }
 
         notifyListeners();
       }
 
-      return enderecoAtualizado;
+      return endereco;
     } catch (e) {
       debugPrint('Erro ao buscar endereço: $e');
       return null;

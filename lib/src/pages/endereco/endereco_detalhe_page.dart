@@ -98,11 +98,11 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
               const Text("Tem certeza de que deseja excluir este endereço?"),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(false), // Cancela
+              onPressed: () => Navigator.of(context).pop(false),
               child: const Text("Cancelar"),
             ),
             TextButton(
-              onPressed: () => Navigator.of(context).pop(true), // Confirma
+              onPressed: () => Navigator.of(context).pop(true),
               child: const Text("Excluir", style: TextStyle(color: Colors.red)),
             ),
           ],

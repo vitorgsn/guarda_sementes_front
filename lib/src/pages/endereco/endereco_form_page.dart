@@ -57,7 +57,7 @@ class _EnderecoFormPageState extends State<EnderecoFormPage> {
 
       try {
         await Provider.of<EnderecoController>(context, listen: false)
-            .criarEndreco(endereco);
+            .criarEndereco(endereco);
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Endereço salvo com sucesso!')),

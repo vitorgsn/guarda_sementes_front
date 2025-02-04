@@ -3,6 +3,7 @@ import 'package:guarda_sementes_front/my_app.dart';
 import 'package:guarda_sementes_front/src/controllers/armazem_controller.dart';
 import 'package:guarda_sementes_front/src/controllers/authentication_controller.dart';
 import 'package:guarda_sementes_front/src/controllers/cidade_controller.dart';
+import 'package:guarda_sementes_front/src/controllers/contato_controller.dart';
 import 'package:guarda_sementes_front/src/controllers/endereco_controller.dart';
 import 'package:guarda_sementes_front/src/controllers/semente_controller.dart';
 import 'package:guarda_sementes_front/src/controllers/semente_disponivel_troca_controller.dart';
@@ -21,7 +22,8 @@ void main() {
       ChangeNotifierProvider(create: (context) => EnderecoController()),
       ChangeNotifierProvider(
         create: (context) => CidadeController(),
-      )
+      ),
+      ChangeNotifierProvider(create: (context) => ContatoController()),
     ],
     child: const MyApp(),
   ));
