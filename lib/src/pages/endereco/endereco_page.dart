@@ -81,26 +81,14 @@ class _EnderecoPageState extends State<EnderecoPage> {
                 ),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 18),
                 onTap: () {
-                  // Navegar para a tela de detalhes do endereço
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => EnderecoDetalhePage(
                         endNrId: endereco.endNrId!,
-                        endTxBairro: endereco.endTxBairro,
-                        endTxLogradouro: endereco.endTxLogradouro,
-                        endTxNumero: endereco.endTxNumero,
-                        endTxReferencia: endereco.endTxReferencia,
-                        endBlEnderecoPadrao: endereco.endBlEnderecoPadrao!,
-                        cidNrId: endereco.cidNrId,
-                        cidTxNome: endereco.cidTxNome,
-                        estNrId: endereco.estNrId,
-                        estTxNome: endereco.estTxNome,
-                        estTxSigla: endereco.estTxSigla,
                       ),
                     ),
                   ).then((_) {
-                    // Quando voltar da tela de detalhes, atualize os dados
                     _carregarEnderecos();
                   });
                 },
@@ -117,7 +105,6 @@ class _EnderecoPageState extends State<EnderecoPage> {
               builder: (context) => const EnderecoFormPage(),
             ),
           ).then((_) {
-            // Quando voltar da tela de formulário, atualize os dados
             _carregarEnderecos();
           });
         },

@@ -1,16 +1,16 @@
 class Cidade {
   final int? cidNrId;
   final String cidTxNome;
-  final int estNrId;
-  final String estTxNome;
-  final String estTxSigla;
+  final int? estNrId;
+  final String? estTxNome;
+  final String? estTxSigla;
 
   Cidade({
     this.cidNrId,
     required this.cidTxNome,
-    required this.estNrId,
-    required this.estTxNome,
-    required this.estTxSigla,
+    this.estNrId,
+    this.estTxNome,
+    this.estTxSigla,
   });
 
   factory Cidade.fromJson(Map<String, dynamic> json) {

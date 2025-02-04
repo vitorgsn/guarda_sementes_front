@@ -63,4 +63,83 @@ class EnderecoService {
       throw ('Erro ao processar, contate o suporte');
     }
   }
+
+  Future<Endereco?> atualizarEndereco(Endereco endereco) async {
+    try {
+      token = (await _storage.read(key: 'token'))!;
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      final uri = Uri.parse('$baseUrl/${endereco.endNrId}');
+
+      final response = await http.put(
+        uri,
+        headers: headers,
+        body: json.encode(endereco.toJson()),
+      );
+
+      if (response.statusCode == 201) {
+        return Endereco.fromJson(json.decode(response.body));
+      } else {
+        throw 'Falha ao atualizar o endereço';
+      }
+    } on http.ClientException {
+      throw 'Servidor offline. Tente novamente mais tarde.';
+    } on TimeoutException {
+      throw 'Tempo de espera da conexão excedido. Tente novamente.';
+    } catch (e) {
+      throw ('Erro ao processar, contate o suporte');
+    }
+  }
+
+  Future<Endereco?> buscarEnderecoPorId(int endNrId) async {
+    try {
+      token = (await _storage.read(key: 'token'))!;
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      final uri = Uri.parse('$baseUrl/$endNrId');
+      final response = await http.get(uri, headers: headers);
+
+      if (response.statusCode == 200) {
+        final decodedBody = utf8.decode(response.bodyBytes);
+        return Endereco.fromJson(json.decode(decodedBody));
+      } else {
+        throw 'Falha ao buscar o endereço. Código: ${response.statusCode}';
+      }
+    } on http.ClientException {
+      throw 'Servidor offline. Tente novamente mais tarde.';
+    } on TimeoutException {
+      throw 'Tempo de espera excedido. Tente novamente.';
+    } catch (e) {
+      throw 'Erro ao processar a requisição: $e';
+    }
+  }
+
+  Future<void> excluirEndereco(int endNrId) async {
+    try {
+      token = (await _storage.read(key: 'token'))!;
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      final uri = Uri.parse('$baseUrl/$endNrId');
+      final response = await http.delete(uri, headers: headers);
+
+      if (response.statusCode != 204) {
+        throw 'Falha ao excluir o endereço. Código: ${response.statusCode}';
+      }
+    } on http.ClientException {
+      throw 'Servidor offline. Tente novamente mais tarde.';
+    } on TimeoutException {
+      throw 'Tempo de espera excedido. Tente novamente.';
+    } catch (e) {
+      throw 'Erro ao excluir o endereço: $e';
+    }
+  }
 }
