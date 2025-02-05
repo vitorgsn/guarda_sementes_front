@@ -27,4 +27,49 @@ class SementeController with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<void> atualizarSemente(Semente semente) async {
+    try {
+      final sementeAtualizada = await _sementeService.atualizarSemente(semente);
+      final index = _sementes.indexWhere((e) => e.semNrId == semente.semNrId);
+      if (index != -1) {
+        _sementes[index] = sementeAtualizada!;
+        notifyListeners();
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Semente?> buscarSementePorId(int semNrId) async {
+    try {
+      final semente = await _sementeService.buscarSementePorId(semNrId);
+
+      if (semente != null) {
+        final index = _sementes.indexWhere((e) => e.semNrId == semNrId);
+
+        if (index != -1) {
+          _sementes[index] = semente;
+        } else {
+          _sementes.add(semente);
+        }
+
+        notifyListeners();
+      }
+
+      return semente;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> excluirSemente(int semNrId) async {
+    try {
+      await _sementeService.excluirSemente(semNrId);
+      _sementes.removeWhere((e) => e.semNrId == semNrId);
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

@@ -21,9 +21,9 @@ class _ArmazemPageState extends State<ArmazemPage> {
   Future<void> _carregarArmazens() async {
     final armazemController =
         Provider.of<ArmazemController>(context, listen: false);
-    if (armazemController.armazens.isEmpty) {
-      await armazemController.listarArmazens();
-    }
+    await armazemController.listarArmazens(filtros: {
+      'sort': 'arm_nr_id,desc',
+    });
   }
 
   @override
@@ -32,27 +32,27 @@ class _ArmazemPageState extends State<ArmazemPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MINHAS SEMENTES'),
+        title: const Text('Sementes'),
         automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: armazemController.armazens.isEmpty
-            ? const Center(child: CircularProgressIndicator())
-            : _buildGrid(armazemController),
-      ),
+      body: armazemController.armazens.isEmpty
+          ? const Center(
+              child: Text(
+                'Nenhum armazém encontrado.',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            )
+          : _buildGrid(armazemController),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          final novoArmazem = await Navigator.push<Map<String, dynamic>>(
+          await Navigator.push<Map<String, dynamic>>(
             context,
             MaterialPageRoute(
               builder: (context) => const ArmazemFormPage(),
             ),
           );
 
-          if (novoArmazem != null) {
-            _carregarArmazens();
-          }
+          _carregarArmazens();
         },
         backgroundColor: Colors.green,
         icon: const Icon(Icons.add),

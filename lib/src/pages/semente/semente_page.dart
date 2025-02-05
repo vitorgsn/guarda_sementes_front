@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guarda_sementes_front/src/controllers/armazem_controller.dart';
 import 'package:guarda_sementes_front/src/controllers/semente_controller.dart';
 import 'package:guarda_sementes_front/src/pages/semente/semente_form_page.dart';
 import 'package:guarda_sementes_front/src/pages/semente/semente_detalhe_page.dart';
@@ -34,6 +35,52 @@ class _SementePageState extends State<SementePage> {
     });
   }
 
+  Future<void> _excluirArmazem() async {
+    bool confirmado = await _mostrarDialogoConfirmacao();
+    if (confirmado) {
+      try {
+        final armazemController =
+            Provider.of<ArmazemController>(context, listen: false);
+        await armazemController.excluirArmazem(widget.armNrId);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Armazém excluído com sucesso!')),
+        );
+
+        Navigator.pop(context);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Erro ao excluir Armazém: $e")),
+        );
+      }
+    }
+  }
+
+  Future<bool> _mostrarDialogoConfirmacao() async {
+    return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Confirmar Exclusão"),
+            content: const Text(
+                "Tem certeza de que deseja excluir este armazém? Esta ação não pode ser desfeita."),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text("Cancelar"),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text(
+                  "Excluir",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final sementeController = Provider.of<SementeController>(context);
@@ -41,32 +88,51 @@ class _SementePageState extends State<SementePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.armTxDescricao),
-        backgroundColor: Colors.green,
       ),
       body: sementeController.sementes.isEmpty
-          ? const Center(
-              child: Text(
-                'Nenhuma semente encontrada.',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-            )
+          ? _buildSemSementes()
           : _buildGrid(sementeController),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.push<Map<String, dynamic>>(
+          await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => SementeFormPage(
                 armNrId: widget.armNrId,
               ),
             ),
-          );
-
-          _carregarSementes();
+          ).then((_) {
+            _carregarSementes();
+          });
         },
         backgroundColor: Colors.green,
-        icon: const Icon(Icons.add),
-        label: const Text('Nova Semente'),
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _buildSemSementes() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            'Nenhuma semente encontrada.',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: _excluirArmazem,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            ),
+            child: const Text(
+              "Excluir Armazém",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -90,12 +156,13 @@ class _SementePageState extends State<SementePage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => SementeDetalhePage(
-                    imagem: 'assets/semente1.png', // Imagem fixa
-                    nome: semente.semTxNome,
-                    quantidade: semente.semNrQuantidade,
+                    semNrId: semente.semNrId!,
+                    armNrId: widget.armNrId,
                   ),
                 ),
-              );
+              ).then((_) {
+                _carregarSementes();
+              });
             },
             child: Card(
               elevation: 4,

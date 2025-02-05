@@ -12,7 +12,7 @@ class ArmazemController with ChangeNotifier {
       _armazens = await _armazemService.listarArmazens(filtros: filtros);
       notifyListeners();
     } catch (e) {
-      print('Erro ao listar os armazéns');
+      rethrow;
     }
   }
 
@@ -20,6 +20,16 @@ class ArmazemController with ChangeNotifier {
     try {
       final novoArmazem = await _armazemService.criarArmazem(armazem);
       _armazens.add(novoArmazem!);
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> excluirArmazem(int armNrId) async {
+    try {
+      await _armazemService.excluirArmazem(armNrId);
+      _armazens.removeWhere((e) => e.armNrId == armNrId);
       notifyListeners();
     } catch (e) {
       rethrow;

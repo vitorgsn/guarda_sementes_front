@@ -58,8 +58,7 @@ class EnderecoController with ChangeNotifier {
 
       return endereco;
     } catch (e) {
-      debugPrint('Erro ao buscar endereço: $e');
-      return null;
+      rethrow;
     }
   }
 
@@ -69,7 +68,7 @@ class EnderecoController with ChangeNotifier {
       _enderecos.removeWhere((e) => e.endNrId == endNrId);
       notifyListeners();
     } catch (e) {
-      debugPrint('Erro ao excluir endereço: $e');
+      rethrow;
     }
   }
 }

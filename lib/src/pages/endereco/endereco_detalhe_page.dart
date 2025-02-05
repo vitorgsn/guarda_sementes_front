@@ -81,7 +81,7 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
       endTxNumero: _numeroController.text,
       endTxReferencia: _referenciaController.text,
       endBlEnderecoPadrao: _isEnderecoPadrao,
-      cidNrId: _cidadeSelecionadaId, // Usando a cidade selecionada
+      cidNrId: _cidadeSelecionadaId,
     );
 
     await EnderecoController().atualizarEndereco(endereco);
