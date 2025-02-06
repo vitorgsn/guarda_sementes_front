@@ -74,6 +74,26 @@ class _EnderecoFormPageState extends State<EnderecoFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    InputDecoration _inputDecoration(String label) {
+      return InputDecoration(
+        labelText: label,
+        filled: true,
+        fillColor: Colors.grey[50],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Colors.black),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Colors.black),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Colors.green),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Cadastrar Endereço')),
       body: Padding(
@@ -97,7 +117,7 @@ class _EnderecoFormPageState extends State<EnderecoFormPage> {
                   return DropdownButtonFormField<Cidade>(
                     value: _cidadeSelecionada,
                     hint: const Text('Selecione a cidade'),
-                    decoration: const InputDecoration(labelText: 'Cidade'),
+                    decoration: _inputDecoration('Cidade *'),
                     items: cidades.map((cidade) {
                       return DropdownMenuItem(
                         value: cidade,
@@ -118,28 +138,30 @@ class _EnderecoFormPageState extends State<EnderecoFormPage> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _bairroController,
-                decoration: const InputDecoration(labelText: 'Bairro'),
+                decoration: _inputDecoration('Bairro *'),
                 validator: (value) =>
                     value!.isEmpty ? 'Informe o bairro' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _logradouroController,
-                decoration: const InputDecoration(labelText: 'Logradouro'),
+                decoration: _inputDecoration('Logradouro *'),
                 validator: (value) =>
                     value!.isEmpty ? 'Informe o logradouro' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _numeroController,
-                decoration: const InputDecoration(labelText: 'Número'),
+                decoration: _inputDecoration('Número *'),
                 validator: (value) =>
                     value!.isEmpty ? 'Informe o número' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _referenciaController,
-                decoration: const InputDecoration(labelText: 'Referência'),
+                decoration: _inputDecoration('Referência *'),
+                validator: (value) =>
+                    value!.isEmpty ? 'Informe a referência' : null,
               ),
               const SizedBox(height: 16),
               Row(
@@ -152,20 +174,48 @@ class _EnderecoFormPageState extends State<EnderecoFormPage> {
                       });
                     },
                   ),
-                  const Text('Endereço Padrão'),
+                  const Text(
+                    'Endereço Padrão',
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ],
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      backgroundColor: Theme.of(context).primaryColor,
+                    ),
                     onPressed: _salvarEndereco,
-                    child: const Text('Salvar'),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      child: const Text(
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        textAlign: TextAlign.center,
+                        'Salvar',
+                      ),
+                    ),
                   ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      backgroundColor: Colors.grey,
+                    ),
                     onPressed: () => Navigator.pop(context),
-                    child: const Text('Cancelar'),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      child: const Text(
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        textAlign: TextAlign.center,
+                        'Cancelar',
+                      ),
+                    ),
                   ),
                 ],
               ),

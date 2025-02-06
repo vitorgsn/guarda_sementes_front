@@ -6,8 +6,12 @@ class SementeController with ChangeNotifier {
   final SementeService _sementeService = SementeService();
   List<Semente> _sementes = [];
   List<Semente> get sementes => _sementes;
+  bool isLoading = false;
 
   Future<void> listarSementes({Map<String, dynamic>? filtros}) async {
+    isLoading = true;
+    notifyListeners();
+
     try {
       _sementes = [];
       notifyListeners();
@@ -15,6 +19,9 @@ class SementeController with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       rethrow;
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 

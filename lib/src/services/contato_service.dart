@@ -6,7 +6,7 @@ import 'package:guarda_sementes_front/src/models/contato.dart';
 import 'package:http/http.dart' as http;
 
 class ContatoService {
-  final String baseUrl = 'http://localhost:5786/api/contatos';
+  final String baseUrl = 'http://192.168.0.104:5786/api/contatos';
   var token = '';
   final _storage = const FlutterSecureStorage();
 

@@ -48,7 +48,7 @@ class _PerfilPageState extends State<PerfilPage> {
               children: [
                 CircleAvatar(
                   radius: 80,
-                  backgroundColor: Colors.green, // Cor de fundo do avatar
+                  backgroundColor: Theme.of(context).primaryColor,
                   child: usuarioController.usuario?.usuTxNome != null &&
                           usuarioController.usuario!.usuTxNome.isNotEmpty
                       ? Text(
@@ -62,7 +62,7 @@ class _PerfilPageState extends State<PerfilPage> {
                       : const Icon(
                           Icons.person,
                           size: 40,
-                          color: Colors.white, // Ícone padrão
+                          color: Colors.white,
                         ),
                 ),
                 const SizedBox(height: 16),
@@ -74,72 +74,93 @@ class _PerfilPageState extends State<PerfilPage> {
                   ),
                 ),
                 const SizedBox(height: 40),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const EnderecoPage(),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 5,
+                        backgroundColor: Theme.of(context).primaryColor,
                       ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 48),
-                  ),
-                  child: const Text(
-                    'Endereços',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ContatoPage(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 48),
-                  ),
-                  child: const Text(
-                    'Contatos',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      await _authenticationController.logout();
-                      Navigator.of(context).pushReplacementNamed('/login');
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          backgroundColor: Colors.redAccent,
-                          content: Text('Falha ao fazer logout'),
-                          behavior: SnackBarBehavior.floating,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EnderecoPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 60, vertical: 15),
+                        child: const Text(
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                          textAlign: TextAlign.center,
+                          'Endereços',
                         ),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 48),
-                  ),
-                  child: const Text(
-                    'Sair',
-                    style: TextStyle(
-                      fontSize: 20,
+                      ),
                     ),
-                  ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 5,
+                        backgroundColor: Theme.of(context).primaryColor,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ContatoPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 60, vertical: 15),
+                        child: const Text(
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                          textAlign: TextAlign.center,
+                          'Contatos',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 48,
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 5,
+                        backgroundColor: Theme.of(context).primaryColor,
+                      ),
+                      onPressed: () async {
+                        try {
+                          await _authenticationController.logout();
+                          Navigator.of(context).pushReplacementNamed('/login');
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: Colors.redAccent,
+                              content: Text('Falha ao fazer logout'),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 60, vertical: 15),
+                        child: const Text(
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                          textAlign: TextAlign.center,
+                          'Sair',
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
               ],
             ),
           ),

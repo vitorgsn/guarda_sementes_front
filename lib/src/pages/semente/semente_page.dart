@@ -23,7 +23,9 @@ class _SementePageState extends State<SementePage> {
   @override
   void initState() {
     super.initState();
-    _carregarSementes();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _carregarSementes();
+    });
   }
 
   Future<void> _carregarSementes() async {
@@ -85,13 +87,21 @@ class _SementePageState extends State<SementePage> {
   Widget build(BuildContext context) {
     final sementeController = Provider.of<SementeController>(context);
 
+    Widget _buildLoading() {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.armTxDescricao),
       ),
-      body: sementeController.sementes.isEmpty
-          ? _buildSemSementes()
-          : _buildGrid(sementeController),
+      body: sementeController.isLoading
+          ? _buildLoading()
+          : sementeController.sementes.isEmpty
+              ? _buildSemSementes()
+              : _buildGrid(sementeController),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.push(
@@ -105,7 +115,6 @@ class _SementePageState extends State<SementePage> {
             _carregarSementes();
           });
         },
-        backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
     );
@@ -140,77 +149,82 @@ class _SementePageState extends State<SementePage> {
   Widget _buildGrid(SementeController controller) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          childAspectRatio: 3 / 2,
-        ),
-        itemCount: controller.sementes.length,
-        itemBuilder: (context, index) {
-          final semente = controller.sementes[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SementeDetalhePage(
-                    semNrId: semente.semNrId!,
-                    armNrId: widget.armNrId,
-                  ),
-                ),
-              ).then((_) {
-                _carregarSementes();
-              });
-            },
-            child: Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+      child: Column(
+        children: [
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ClipOval(
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        color: Colors.green[100],
-                        child: const Icon(
-                          Icons.grain,
-                          color: Colors.green,
-                          size: 32,
+              itemCount: controller.sementes.length,
+              itemBuilder: (context, index) {
+                final semente = controller.sementes[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SementeDetalhePage(
+                          semNrId: semente.semNrId!,
+                          armNrId: widget.armNrId,
                         ),
                       ),
+                    ).then((_) {
+                      _carregarSementes();
+                    });
+                  },
+                  child: Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      semente.semTxNome,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ClipOval(
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              color: Colors.green[100],
+                              child: const Icon(
+                                Icons.grain,
+                                color: Colors.green,
+                                size: 32,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            semente.semTxNome,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '${semente.semNrQuantidade} kg',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${semente.semNrQuantidade} kg',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }

@@ -16,7 +16,7 @@ class CategoriaArmazemController with ChangeNotifier {
       notifyListeners();
       return _categorias;
     } catch (e) {
-      throw Exception('Erro ao listar as categorias: $e');
+      rethrow;
     }
   }
 }

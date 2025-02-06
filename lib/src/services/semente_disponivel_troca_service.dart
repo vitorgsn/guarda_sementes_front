@@ -6,7 +6,8 @@ import 'package:guarda_sementes_front/src/models/semente_disponivel_troca.dart';
 import 'package:http/http.dart' as http;
 
 class SementeDisponivelTrocaService {
-  final String baseUrl = 'http://localhost:5786/api/sementes-disponiveis-troca';
+  final String baseUrl =
+      'http://192.168.0.104:5786/api/sementes-disponiveis-troca';
   var token = '';
   final _storage = const FlutterSecureStorage();
 
@@ -33,6 +34,34 @@ class SementeDisponivelTrocaService {
         return sementesDisponiveisJson
             .map((semente) => SementeDisponivelTroca.fromJson(semente))
             .toList();
+      } else {
+        throw (response.body);
+      }
+    } on http.ClientException {
+      throw 'Servidor offline. Tente novamente mais tarde.';
+    } on TimeoutException {
+      throw 'Tempo de espera da conexão excedido. Tente novamente.';
+    } catch (e) {
+      throw ('Erro ao processar, contate o suporte');
+    }
+  }
+
+  Future<SementeDisponivelTroca?> cadastrarSementeDisponivelTroca(
+      SementeDisponivelTroca semente) async {
+    try {
+      token = (await _storage.read(key: 'token'))!;
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      final uri = Uri.parse(baseUrl);
+
+      final response = await http.post(uri,
+          headers: headers, body: json.encode(semente.toJson()));
+
+      if (response.statusCode == 201) {
+        return SementeDisponivelTroca.fromJson(json.decode(response.body));
       } else {
         throw (response.body);
       }

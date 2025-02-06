@@ -6,7 +6,7 @@ import 'package:guarda_sementes_front/src/models/semente.dart';
 import 'package:http/http.dart' as http;
 
 class SementeService {
-  final String baseUrl = 'http://localhost:5786/api/sementes';
+  final String baseUrl = 'http://192.168.0.104:5786/api/sementes';
   var token = '';
   final _storage = const FlutterSecureStorage();
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:guarda_sementes_front/src/controllers/contato_controller.dart';
 import 'package:guarda_sementes_front/src/models/contato.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,7 @@ class ContatoFormPage extends StatefulWidget {
 
 class _ContatoFormPageState extends State<ContatoFormPage> {
   final _formKey = GlobalKey<FormState>();
-  final _numeroController = TextEditingController();
+  final _numeroController = MaskedTextController(mask: '(00) 0 0000-0000');
   final _emailController = TextEditingController();
 
   @override
@@ -23,8 +24,6 @@ class _ContatoFormPageState extends State<ContatoFormPage> {
   }
 
   Future<void> _salvarContato() async {
-    print(_formKey.currentState);
-
     if (_formKey.currentState!.validate()) {
       final contato = Contato(
         conTxNumero: _numeroController.text,
@@ -50,6 +49,26 @@ class _ContatoFormPageState extends State<ContatoFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    InputDecoration _inputDecoration(String label) {
+      return InputDecoration(
+        labelText: label,
+        filled: true,
+        fillColor: Colors.grey[50],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Colors.black),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Colors.black),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Colors.green),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cadastrar Contato'),
@@ -60,27 +79,76 @@ class _ContatoFormPageState extends State<ContatoFormPage> {
           key: _formKey,
           child: Column(
             children: [
-              TextField(
+              const SizedBox(height: 16),
+              TextFormField(
                 controller: _numeroController,
-                decoration: const InputDecoration(labelText: 'Número'),
                 keyboardType: TextInputType.phone,
+                decoration: _inputDecoration('Telefone *'),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'O telefone é obrigatório';
+                  }
+                  final phoneRegex = RegExp(r'^\(\d{2}\) \d{1} \d{4}-\d{4}$');
+                  if (!phoneRegex.hasMatch(value)) {
+                    return 'Formato de telefone inválido';
+                  }
+                  return null;
+                },
               ),
-              TextField(
+              const SizedBox(height: 8),
+              TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: _inputDecoration('E-mail *'),
                 keyboardType: TextInputType.emailAddress,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'O e-mail é obrigatório';
+                  }
+                  final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                  if (!emailRegex.hasMatch(value)) {
+                    return 'E-mail inválido';
+                  }
+                  return null;
+                },
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      backgroundColor: Theme.of(context).primaryColor,
+                    ),
                     onPressed: _salvarContato,
-                    child: const Text('Salvar'),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      child: const Text(
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        textAlign: TextAlign.center,
+                        'Salvar',
+                      ),
+                    ),
                   ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      backgroundColor: Colors.grey,
+                    ),
                     onPressed: () => Navigator.pop(context),
-                    child: const Text('Cancelar'),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      child: const Text(
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        textAlign: TextAlign.center,
+                        'Cancelar',
+                      ),
+                    ),
                   ),
                 ],
               ),

@@ -108,7 +108,6 @@ class _EnderecoPageState extends State<EnderecoPage> {
             _carregarEnderecos();
           });
         },
-        backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
     );

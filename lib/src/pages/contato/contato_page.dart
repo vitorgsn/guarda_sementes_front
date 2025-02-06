@@ -52,7 +52,7 @@ class _ContatoPageState extends State<ContatoPage> {
                   'Telefone: ${contato.conTxNumero}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                 ),
                 subtitle: Column(
@@ -61,7 +61,10 @@ class _ContatoPageState extends State<ContatoPage> {
                     const SizedBox(height: 4),
                     Text(
                       'E-mail: ${contato.conTxEmail}',
-                      style: const TextStyle(color: Colors.grey),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
                     ),
                   ],
                 ),
@@ -92,7 +95,6 @@ class _ContatoPageState extends State<ContatoPage> {
             ),
           );
         },
-        backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
     );

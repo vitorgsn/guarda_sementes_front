@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:guarda_sementes_front/src/controllers/semente_controller.dart';
+import 'package:guarda_sementes_front/src/controllers/semente_disponivel_troca_controller.dart';
 import 'package:guarda_sementes_front/src/models/semente.dart';
+import 'package:guarda_sementes_front/src/models/semente_disponivel_troca.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class SementeDetalhePage extends StatefulWidget {
@@ -22,6 +27,7 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
   late TextEditingController _nomeController;
   late TextEditingController _quantidadeController;
   late TextEditingController _descricaoController;
+  File? _imagem;
 
   String _tituloAppBar = "Detalhes da Semente";
 
@@ -33,6 +39,17 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
     _descricaoController = TextEditingController();
 
     _carregarSemente();
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: source);
+
+    if (pickedFile != null) {
+      setState(() {
+        _imagem = File(pickedFile.path);
+      });
+    }
   }
 
   Future<void> _carregarSemente() async {
@@ -70,6 +87,9 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
   }
 
   void _salvarSemente() async {
+    final sementeController =
+        Provider.of<SementeController>(context, listen: false);
+
     final semente = Semente(
       semNrId: widget.semNrId,
       semTxNome: _nomeController.text,
@@ -78,7 +98,7 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
       armNrId: widget.armNrId,
     );
 
-    await SementeController().atualizarSemente(semente);
+    await sementeController.atualizarSemente(semente);
     Navigator.pop(context);
   }
 
@@ -123,57 +143,73 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
     }
   }
 
-  void disponibilizarParaTroca() {
-    final quantidadeTrocaController = TextEditingController();
-    final observacaoController = TextEditingController();
+  void _disponibilizarParaTroca(BuildContext context, int idSemente) {
+    final sementeDisponivelTrocaController =
+        Provider.of<SementeDisponivelTrocaController>(context, listen: false);
+
+    TextEditingController qtdController = TextEditingController();
+    TextEditingController observacoesController = TextEditingController();
 
     showDialog(
       context: context,
-      builder: (context) {
+      builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Disponibilizar para troca'),
+          title: const Text("Disponibilizar para troca"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
-                controller: quantidadeTrocaController,
+              TextFormField(
+                controller: qtdController,
+                decoration:
+                    const InputDecoration(label: Text('Quantidade (kg) *')),
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Quantidade',
-                  border: OutlineInputBorder(),
-                ),
+                inputFormatters: [
+                  CurrencyInputFormatter(
+                    thousandSeparator: ThousandSeparator.None,
+                    leadingSymbol: '',
+                    trailingSymbol: ' kg',
+                    mantissaLength: 3,
+                  ),
+                ],
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, insira a quantidade';
+                  }
+                  String quantidadeSemKg = value.replaceAll(' kg', '').trim();
+                  double? quantidade = double.tryParse(quantidadeSemKg);
+
+                  if (quantidade == null || quantidade <= 0) {
+                    return 'Insira um número válido e maior que zero';
+                  }
+
+                  return null;
+                },
               ),
-              const SizedBox(height: 16),
               TextField(
-                controller: observacaoController,
-                decoration: const InputDecoration(
-                  labelText: 'Observação',
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 3,
+                controller: observacoesController,
+                decoration: const InputDecoration(labelText: "Observações"),
               ),
             ],
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Cancelar'),
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Cancelar"),
             ),
             ElevatedButton(
-              onPressed: () {
-                final quantidade = quantidadeTrocaController.text;
-                final observacao = observacaoController.text;
+              onPressed: () async {
+                SementeDisponivelTroca semente = SementeDisponivelTroca(
+                  semNrIdSemente: idSemente,
+                  sdtNrQuantidade: _converterQuantidade(qtdController.text)!,
+                  sdtTxObservacoes: observacoesController.text,
+                );
 
-                // Aqui você pode salvar os dados em uma API ou banco de dados
-                print('Disponibilizado para troca:');
-                print('Quantidade: $quantidade');
-                print('Observação: $observacao');
+                await sementeDisponivelTrocaController
+                    .cadastrarSementeDisponivelTroca(semente);
 
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               },
-              child: const Text('Confirmar'),
+              child: const Text("Confirmar"),
             ),
           ],
         );
@@ -183,6 +219,26 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
 
   @override
   Widget build(BuildContext context) {
+    InputDecoration _inputDecoration(String label) {
+      return InputDecoration(
+        labelText: label,
+        filled: true,
+        fillColor: Colors.grey[50],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Colors.black),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Colors.black),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Colors.green),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_tituloAppBar),
@@ -192,42 +248,53 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey, width: 1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ClipOval(
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  color: Colors.green[100],
-                  child: const Icon(
-                    Icons.grain,
-                    color: Colors.green,
-                    size: 32,
-                  ),
+            GestureDetector(
+              onTap: () async {
+                await _pickImage(ImageSource.gallery);
+              },
+              child: Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.grey[50],
                 ),
+                child: _imagem == null
+                    ? const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.photo_camera,
+                              size: 50,
+                              color: Colors.grey,
+                            ),
+                            Text(
+                              'Clique para adicionar uma imagem',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.file(
+                          _imagem!,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
               ),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: _nomeController,
-              decoration: const InputDecoration(labelText: 'Nome'),
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              decoration: _inputDecoration('Nome *'),
             ),
             const SizedBox(height: 8),
             TextField(
               controller: _quantidadeController,
-              decoration: const InputDecoration(labelText: 'Quantidade (kg)'),
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              decoration: _inputDecoration('Quantidade (kg)*'),
               keyboardType: TextInputType.number,
               inputFormatters: [
                 CurrencyInputFormatter(
@@ -241,36 +308,64 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
             const SizedBox(height: 8),
             TextField(
               controller: _descricaoController,
-              decoration: const InputDecoration(labelText: 'Quantidade'),
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              decoration: _inputDecoration('Descrição'),
             ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
                   onPressed: _salvarSemente,
-                  child: const Text('Salvar'),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    child: const Text(
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      textAlign: TextAlign.center,
+                      'Salvar',
+                    ),
+                  ),
                 ),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    backgroundColor: Colors.red,
+                  ),
                   onPressed: _excluirSemente,
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                  child: const Text('Excluir',
-                      style: TextStyle(color: Colors.white)),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    child: const Text(
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      textAlign: TextAlign.center,
+                      'Excluir',
+                    ),
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: disponibilizarParaTroca,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+                elevation: 5,
+                backgroundColor: Theme.of(context).primaryColor,
               ),
-              child: const Text('Disponibilizar para troca',
-                  style: TextStyle(color: Colors.white)),
+              onPressed: () =>
+                  _disponibilizarParaTroca(context, widget.semNrId),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                child: const Text(
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                  textAlign: TextAlign.center,
+                  'Disponibilizar para troca',
+                ),
+              ),
             ),
           ],
         ),

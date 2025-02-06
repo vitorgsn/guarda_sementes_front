@@ -8,10 +8,7 @@ import 'package:provider/provider.dart';
 class EnderecoDetalhePage extends StatefulWidget {
   final int endNrId;
 
-  const EnderecoDetalhePage({
-    super.key,
-    required this.endNrId,
-  });
+  const EnderecoDetalhePage({super.key, required this.endNrId});
 
   @override
   State<EnderecoDetalhePage> createState() => _EnderecoDetalhePageState();
@@ -24,7 +21,7 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
   late TextEditingController _referenciaController;
 
   late bool _isEnderecoPadrao = false;
-  late int _cidadeSelecionadaId = 0;
+  late int? _cidadeSelecionadaId;
   List<Cidade> _cidades = [];
 
   @override
@@ -34,34 +31,52 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
     _logradouroController = TextEditingController();
     _numeroController = TextEditingController();
     _referenciaController = TextEditingController();
+    _cidadeSelecionadaId = null;
 
     _carregarCidades();
     _carregarEndereco();
   }
 
   Future<void> _carregarEndereco() async {
-    final enderecoController =
-        Provider.of<EnderecoController>(context, listen: false);
-    final endereco =
-        await enderecoController.buscarEnderecoPorId(widget.endNrId);
+    try {
+      final enderecoController =
+          Provider.of<EnderecoController>(context, listen: false);
+      final endereco =
+          await enderecoController.buscarEnderecoPorId(widget.endNrId);
 
-    if (endereco != null) {
-      _bairroController.text = endereco.endTxBairro;
-      _logradouroController.text = endereco.endTxLogradouro;
-      _numeroController.text = endereco.endTxNumero;
-      _referenciaController.text = endereco.endTxReferencia;
-      _isEnderecoPadrao = endereco.endBlEnderecoPadrao!;
-      _cidadeSelecionadaId = endereco.cidNrId!;
+      if (endereco != null) {
+        _bairroController.text = endereco.endTxBairro;
+        _logradouroController.text = endereco.endTxLogradouro;
+        _numeroController.text = endereco.endTxNumero;
+        _referenciaController.text = endereco.endTxReferencia;
+        _isEnderecoPadrao = endereco.endBlEnderecoPadrao ?? false;
+        _cidadeSelecionadaId = endereco.cidNrId ?? 0;
+      }
+
+      if (mounted) {
+        setState(() {});
+      }
+    } catch (e) {
+      debugPrint("Erro ao carregar endereço: $e");
     }
-
-    setState(() {});
   }
 
   Future<void> _carregarCidades() async {
-    final cidadeController =
-        Provider.of<CidadeController>(context, listen: false);
-    _cidades = await cidadeController.listarCidades();
-    setState(() {});
+    try {
+      final cidadeController =
+          Provider.of<CidadeController>(context, listen: false);
+      _cidades = await cidadeController.listarCidades();
+
+      if (mounted) {
+        setState(() {
+          if (_cidadeSelecionadaId == 0 && _cidades.isNotEmpty) {
+            _cidadeSelecionadaId = _cidades.first.cidNrId!;
+          }
+        });
+      }
+    } catch (e) {
+      debugPrint("Erro ao carregar cidades: $e");
+    }
   }
 
   @override
@@ -84,7 +99,9 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
       cidNrId: _cidadeSelecionadaId,
     );
 
-    await EnderecoController().atualizarEndereco(endereco);
+    final enderecoController =
+        Provider.of<EnderecoController>(context, listen: false);
+    await enderecoController.atualizarEndereco(endereco);
     Navigator.pop(context);
   }
 
@@ -131,6 +148,26 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
 
   @override
   Widget build(BuildContext context) {
+    InputDecoration _inputDecoration(String label) {
+      return InputDecoration(
+        labelText: label,
+        filled: true,
+        fillColor: Colors.grey[50],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Colors.black),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Colors.black),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Colors.green),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalhes do Endereço'),
@@ -142,7 +179,8 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
           children: [
             DropdownButtonFormField<int>(
               value: _cidadeSelecionadaId,
-              decoration: const InputDecoration(labelText: 'Cidade'),
+              hint: const Text('Selecione uma cidade'),
+              decoration: _inputDecoration('Cidade *'),
               items: _cidades.map((cidade) {
                 return DropdownMenuItem<int>(
                   value: cidade.cidNrId,
@@ -160,22 +198,22 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
             const SizedBox(height: 16),
             TextField(
               controller: _bairroController,
-              decoration: const InputDecoration(labelText: 'Bairro'),
+              decoration: _inputDecoration('Bairro *'),
             ),
             const SizedBox(height: 8),
             TextField(
               controller: _logradouroController,
-              decoration: const InputDecoration(labelText: 'Logradouro'),
+              decoration: _inputDecoration('Logradouro *'),
             ),
             const SizedBox(height: 8),
             TextField(
               controller: _numeroController,
-              decoration: const InputDecoration(labelText: 'Número'),
+              decoration: _inputDecoration('Número *'),
             ),
             const SizedBox(height: 8),
             TextField(
               controller: _referenciaController,
-              decoration: const InputDecoration(labelText: 'Referência'),
+              decoration: _inputDecoration('Referência *'),
             ),
             const SizedBox(height: 16),
             Row(
@@ -190,23 +228,46 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
                 ),
                 const Text(
                   'Endereço Padrão',
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 16),
                 ),
               ],
             ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
                   onPressed: _salvarEndereco,
-                  child: const Text('Salvar'),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    child: const Text(
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      textAlign: TextAlign.center,
+                      'Salvar',
+                    ),
+                  ),
                 ),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    backgroundColor: Colors.red,
+                  ),
                   onPressed: _excluirEndereco,
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                  child: const Text('Excluir',
-                      style: TextStyle(color: Colors.white)),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    child: const Text(
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      textAlign: TextAlign.center,
+                      'Excluir',
+                    ),
+                  ),
                 ),
               ],
             ),

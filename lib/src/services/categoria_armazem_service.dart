@@ -6,7 +6,7 @@ import 'package:guarda_sementes_front/src/models/categoria_armazem.dart';
 import 'package:http/http.dart' as http;
 
 class CategoriaArmazemService {
-  final String baseUrl = 'http://localhost:5786/api/categorias-armazem';
+  final String baseUrl = 'http://192.168.0.104:5786/api/categorias-armazem';
   var token = '';
   final _storage = const FlutterSecureStorage();
 

@@ -13,8 +13,7 @@ class CidadeController with ChangeNotifier {
       notifyListeners();
       return _cidades;
     } catch (e) {
-      print('Erro ao listar as cidades: $e');
-      throw Exception('Erro ao listar as cidades: $e');
+      rethrow;
     }
   }
 }

@@ -6,7 +6,7 @@ import 'package:guarda_sementes_front/src/models/endereco.dart';
 import 'package:http/http.dart' as http;
 
 class EnderecoService {
-  final String baseUrl = 'http://localhost:5786/api/enderecos';
+  final String baseUrl = 'http://192.168.0.104:5786/api/enderecos';
   var token = '';
   final _storage = const FlutterSecureStorage();
 
@@ -33,7 +33,7 @@ class EnderecoService {
           .map((endereco) => Endereco.fromJson(endereco))
           .toList();
     } else {
-      throw Exception('Falha ao carregar endereços');
+      throw (response.body);
     }
   }
 
@@ -83,7 +83,7 @@ class EnderecoService {
       if (response.statusCode == 201) {
         return Endereco.fromJson(json.decode(response.body));
       } else {
-        throw 'Falha ao atualizar o endereço';
+        throw (response.body);
       }
     } on http.ClientException {
       throw 'Servidor offline. Tente novamente mais tarde.';
@@ -109,7 +109,7 @@ class EnderecoService {
         final decodedBody = utf8.decode(response.bodyBytes);
         return Endereco.fromJson(json.decode(decodedBody));
       } else {
-        throw 'Falha ao buscar o endereço. Código: ${response.statusCode}';
+        throw (response.body);
       }
     } on http.ClientException {
       throw 'Servidor offline. Tente novamente mais tarde.';
@@ -132,7 +132,7 @@ class EnderecoService {
       final response = await http.delete(uri, headers: headers);
 
       if (response.statusCode != 204) {
-        throw 'Falha ao excluir o endereço. Código: ${response.statusCode}';
+        throw (response.body);
       }
     } on http.ClientException {
       throw 'Servidor offline. Tente novamente mais tarde.';

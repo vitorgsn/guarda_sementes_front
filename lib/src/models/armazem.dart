@@ -1,7 +1,7 @@
 class Armazem {
   final int? armNrId;
   final String armTxDescricao;
-  final int ctaNrId;
+  final int? ctaNrId;
 
   Armazem({
     this.armNrId,

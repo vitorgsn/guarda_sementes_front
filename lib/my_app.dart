@@ -15,49 +15,51 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: const Color.fromRGBO(76, 175, 80, 0.8),
-          secondary: Colors.white,
-        ),
-        navigationBarTheme: NavigationBarThemeData(
-          height: 100,
-          backgroundColor: const Color.fromRGBO(76, 175, 80, 0.8),
-          indicatorColor: Colors.transparent,
-          labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
-            (Set<WidgetState> states) {
-              if (states.contains(WidgetState.selected)) {
+          colorScheme: ColorScheme.fromSwatch().copyWith(
+            primary: const Color.fromRGBO(76, 175, 80, 0.8),
+            secondary: Colors.white,
+          ),
+          navigationBarTheme: NavigationBarThemeData(
+            height: 100,
+            backgroundColor: const Color.fromRGBO(76, 175, 80, 0.8),
+            indicatorColor: Colors.transparent,
+            labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
+              (Set<WidgetState> states) {
+                if (states.contains(WidgetState.selected)) {
+                  return const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  );
+                }
                 return const TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: Colors.black87,
                 );
-              }
-              return const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              );
-            },
-          ),
-          iconTheme: WidgetStateProperty.resolveWith<IconThemeData>(
-            (Set<WidgetState> states) {
-              if (states.contains(WidgetState.selected)) {
-                return const IconThemeData(color: Colors.black);
-              }
-              return const IconThemeData(color: Colors.black87);
-            },
-          ),
-        ),
-        appBarTheme: AppBarTheme(
-          centerTitle: true,
-          backgroundColor: const Color.fromRGBO(76, 175, 80, 0.8),
-          titleTextStyle: GoogleFonts.bungeeInline(
-            textStyle: const TextStyle(
-              color: Colors.black87,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+              },
+            ),
+            iconTheme: WidgetStateProperty.resolveWith<IconThemeData>(
+              (Set<WidgetState> states) {
+                if (states.contains(WidgetState.selected)) {
+                  return const IconThemeData(color: Colors.black);
+                }
+                return const IconThemeData(color: Colors.black87);
+              },
             ),
           ),
-        ),
-      ),
+          appBarTheme: AppBarTheme(
+            centerTitle: true,
+            backgroundColor: const Color.fromRGBO(76, 175, 80, 0.8),
+            titleTextStyle: GoogleFonts.bungeeInline(
+              textStyle: const TextStyle(
+                color: Colors.black87,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+            backgroundColor: Color.fromRGBO(76, 175, 80, 0.8),
+          )),
       builder: (context, child) {
         return SafeArea(child: child!);
       },
