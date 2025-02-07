@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guarda_sementes_front/src/pages/perfil/perfil_page.dart';
 import 'package:guarda_sementes_front/src/pages/armazem/armazem_page.dart';
-import 'package:guarda_sementes_front/src/pages/semente/sementes_disponiveis_troca_page.dart';
+import 'package:guarda_sementes_front/src/pages/semente/semente_disponivel_troca_page.dart';
 import 'package:guarda_sementes_front/src/pages/troca/trocas_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
         controller: pc,
         onPageChanged: setPaginaAtual,
         children: const [
-          SementesDisponiveisTrocaPage(),
+          SementeDisponivelTrocaPage(),
           TrocasPage(),
           ArmazemPage(),
           PerfilPage()

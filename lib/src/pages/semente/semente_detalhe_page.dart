@@ -28,6 +28,8 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
   late TextEditingController _quantidadeController;
   late TextEditingController _descricaoController;
   File? _imagem;
+  late TextEditingController _quantidadeParaTrocaController;
+  late TextEditingController _observacoesParaTrocaController;
 
   String _tituloAppBar = "Detalhes da Semente";
 
@@ -37,6 +39,8 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
     _nomeController = TextEditingController();
     _quantidadeController = TextEditingController();
     _descricaoController = TextEditingController();
+    _quantidadeParaTrocaController = TextEditingController();
+    _observacoesParaTrocaController = TextEditingController();
 
     _carregarSemente();
   }
@@ -58,13 +62,13 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
     final semente = await sementeController.buscarSementePorId(widget.semNrId);
 
     if (semente != null) {
-      _nomeController.text = semente.semTxNome;
-      _quantidadeController.text = semente.semNrQuantidade.toString();
-      _descricaoController.text = semente.semTxDescricao!;
-      _tituloAppBar = semente.semTxNome;
+      setState(() {
+        _nomeController.text = semente.semTxNome;
+        _quantidadeController.text = semente.semNrQuantidade.toString();
+        _descricaoController.text = semente.semTxDescricao ?? '';
+        _tituloAppBar = semente.semTxNome;
+      });
     }
-
-    setState(() {});
   }
 
   @override
@@ -143,13 +147,43 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
     }
   }
 
-  void _disponibilizarParaTroca(BuildContext context, int idSemente) {
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      filled: true,
+      fillColor: Colors.grey[50],
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Colors.black),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Colors.black),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Colors.green),
+      ),
+    );
+  }
+
+  Future<void> _disponibilizarParaTroca() async {
     final sementeDisponivelTrocaController =
         Provider.of<SementeDisponivelTrocaController>(context, listen: false);
 
-    TextEditingController qtdController = TextEditingController();
-    TextEditingController observacoesController = TextEditingController();
+    SementeDisponivelTroca semente = SementeDisponivelTroca(
+      semNrIdSemente: widget.semNrId,
+      sdtNrQuantidade:
+          _converterQuantidade(_quantidadeParaTrocaController.text)!,
+      sdtTxObservacoes: _observacoesParaTrocaController.text,
+    );
 
+    await sementeDisponivelTrocaController
+        .cadastrarSementeDisponivelTroca(semente);
+    Navigator.pop(context);
+  }
+
+  void _mostrarDialogoTroca() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -159,9 +193,8 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
-                controller: qtdController,
-                decoration:
-                    const InputDecoration(label: Text('Quantidade (kg) *')),
+                controller: _quantidadeParaTrocaController,
+                decoration: _inputDecoration('Quantidade (kg) *'),
                 keyboardType: TextInputType.number,
                 inputFormatters: [
                   CurrencyInputFormatter(
@@ -185,9 +218,12 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
                   return null;
                 },
               ),
-              TextField(
-                controller: observacoesController,
-                decoration: const InputDecoration(labelText: "Observações"),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _observacoesParaTrocaController,
+                decoration: _inputDecoration('Observações *'),
+                validator: (value) =>
+                    value!.isEmpty ? 'Informe as observações de troca' : null,
               ),
             ],
           ),
@@ -197,18 +233,7 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
               child: const Text("Cancelar"),
             ),
             ElevatedButton(
-              onPressed: () async {
-                SementeDisponivelTroca semente = SementeDisponivelTroca(
-                  semNrIdSemente: idSemente,
-                  sdtNrQuantidade: _converterQuantidade(qtdController.text)!,
-                  sdtTxObservacoes: observacoesController.text,
-                );
-
-                await sementeDisponivelTrocaController
-                    .cadastrarSementeDisponivelTroca(semente);
-
-                Navigator.of(context).pop();
-              },
+              onPressed: _disponibilizarParaTroca,
               child: const Text("Confirmar"),
             ),
           ],
@@ -219,26 +244,6 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
 
   @override
   Widget build(BuildContext context) {
-    InputDecoration _inputDecoration(String label) {
-      return InputDecoration(
-        labelText: label,
-        filled: true,
-        fillColor: Colors.grey[50],
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.black),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.black),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.green),
-        ),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(_tituloAppBar),
@@ -355,8 +360,7 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
                 elevation: 5,
                 backgroundColor: Theme.of(context).primaryColor,
               ),
-              onPressed: () =>
-                  _disponibilizarParaTroca(context, widget.semNrId),
+              onPressed: _mostrarDialogoTroca,
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 15),

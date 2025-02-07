@@ -1,48 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:guarda_sementes_front/src/controllers/semente_disponivel_troca_controller.dart';
 import 'package:guarda_sementes_front/src/pages/semente/escolher_semente_troca_page.dart';
-import 'package:guarda_sementes_front/src/repositories/semente_disponivel_troca_teste_repository.dart';
+import 'package:provider/provider.dart';
 
-class SementesDisponiveisTrocaPage extends StatefulWidget {
-  const SementesDisponiveisTrocaPage({super.key});
+class SementeDisponivelTrocaPage extends StatefulWidget {
+  const SementeDisponivelTrocaPage({super.key});
 
   @override
-  State<SementesDisponiveisTrocaPage> createState() =>
-      _SementesDisponiveisTrocaPageState();
+  State<SementeDisponivelTrocaPage> createState() =>
+      _SementeDisponivelTrocaPageState();
 }
 
-class _SementesDisponiveisTrocaPageState
-    extends State<SementesDisponiveisTrocaPage> {
-  final tabela = SementeDisponivelTrocaTesteRepository.tabela;
-  List<dynamic> listaFiltrada = [];
-  String termoBusca = '';
-
+class _SementeDisponivelTrocaPageState
+    extends State<SementeDisponivelTrocaPage> {
   @override
   void initState() {
     super.initState();
-    listaFiltrada = tabela; // Inicialmente, exibir toda a lista.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _carregarSementesDisponiveis();
+    });
+  }
+
+  Future<void> _carregarSementesDisponiveis() async {
+    final sementeDisponivelTrocaController =
+        Provider.of<SementeDisponivelTrocaController>(context, listen: false);
+    await sementeDisponivelTrocaController.listarSementesDisponiveisTroca(
+      filtros: {'sort': 'sdt_nr_id,desc'},
+    );
   }
 
   void atualizarBusca(String valor) {
-    setState(() {
-      termoBusca = valor.toLowerCase();
-      listaFiltrada = tabela.where((semente) {
-        final nomeSemente = semente.semTxNome.toLowerCase();
-        final cidade = semente.cidTxNome.toLowerCase();
-        final descricao = semente.sdtTxObservacoes.toLowerCase();
-        return nomeSemente.contains(termoBusca) ||
-            cidade.contains(termoBusca) ||
-            descricao.contains(termoBusca);
-      }).toList();
-    });
+    final controller =
+        Provider.of<SementeDisponivelTrocaController>(context, listen: false);
+
+    controller.listarSementesDisponiveisTroca(
+      filtros: {
+        'semTxNome': valor,
+        //'sdtTxObservacoes': valor,
+        //'cidTxNome': valor,
+        //'estTxNome': valor,
+        //'estTxSigla': valor,
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final sementeDisponivelTrocaController =
+        Provider.of<SementeDisponivelTrocaController>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('FEIRA DE TROCAS'),
+        title: const Text('Feira de Trocas'),
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.green,
       ),
       body: Column(
         children: [
@@ -55,25 +65,16 @@ class _SementesDisponiveisTrocaPageState
                 hintText: 'Nome, Cidade ou Descrição',
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8), // Bordas arredondadas
-                  borderSide: const BorderSide(
-                    color: Colors.grey, // Cor da borda
-                    width: 1, // Largura da borda
-                  ),
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Colors.grey, width: 1),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: Colors.grey, // Cor da borda quando habilitado
-                    width: 1,
-                  ),
+                  borderSide: const BorderSide(color: Colors.grey, width: 1),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: Colors.grey, // Cor da borda ao focar
-                    width: 1,
-                  ),
+                  borderSide: const BorderSide(color: Colors.grey, width: 1),
                 ),
               ),
             ),
@@ -81,17 +82,25 @@ class _SementesDisponiveisTrocaPageState
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: ListView.builder(
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.8,
+                ),
+                itemCount: sementeDisponivelTrocaController
+                    .sementesDispoinveisTroca.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final semente = listaFiltrada[index];
+                  final semente = sementeDisponivelTrocaController
+                      .sementesDispoinveisTroca[index];
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => EscolherSementeTrocaPage(
-                            sementeSelecionada:
-                                semente, // Passar a semente clicada para a nova página
+                            sementeSelecionada: semente,
                           ),
                         ),
                       );
@@ -99,30 +108,29 @@ class _SementesDisponiveisTrocaPageState
                     child: Card(
                       elevation: 4,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            12), // Card com bordas mais arredondadas
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0), // Padding reduzido
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             ClipOval(
                               child: Container(
-                                width: 70, // Aumento do tamanho da imagem
+                                width: 70,
                                 height: 70,
                                 color: Colors.green[100],
                                 child: const Icon(
                                   Icons.grain,
                                   color: Colors.green,
-                                  size: 48, // Ícone maior
+                                  size: 48,
                                 ),
                               ),
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              semente.semTxNome,
+                              semente.semTxNome!,
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 fontSize: 16,
@@ -162,7 +170,6 @@ class _SementesDisponiveisTrocaPageState
                     ),
                   );
                 },
-                itemCount: listaFiltrada.length,
               ),
             ),
           ),
