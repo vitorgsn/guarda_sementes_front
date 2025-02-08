@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:guarda_sementes_front/src/controllers/semente_controller.dart';
+import 'package:guarda_sementes_front/src/models/semente.dart';
+import 'package:provider/provider.dart';
 
 class EscolherSementeTrocaPage extends StatefulWidget {
   final dynamic sementeSelecionada;
@@ -11,26 +14,34 @@ class EscolherSementeTrocaPage extends StatefulWidget {
 }
 
 class _EscolherSementeTrocaPageState extends State<EscolherSementeTrocaPage> {
-  final List<dynamic> sementesDoUsuario = [
-    {
-      'nome': 'Milho',
-      'quantidade': 5,
-      'imagemUrl': 'https://via.placeholder.com/150?text=Milho',
-    },
-    {
-      'nome': 'Feijão',
-      'quantidade': 3,
-      'imagemUrl': 'https://via.placeholder.com/150?text=Feijão',
-    },
-    {
-      'nome': 'Trigo',
-      'quantidade': 7,
-      'imagemUrl': 'https://via.placeholder.com/150?text=Trigo',
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _carregarSementes();
+    });
+  }
 
-  void abrirJanelaTroca(
-      BuildContext context, Map<String, dynamic> sementeUsuario) {
+  Future<void> _carregarSementes() async {
+    final sementeController =
+        Provider.of<SementeController>(context, listen: false);
+    await sementeController.listarSementes(filtros: {
+      'sort': 'sem_nr_id,desc',
+    });
+  }
+
+  void atualizarBusca(String valor) {
+    final sementeController =
+        Provider.of<SementeController>(context, listen: false);
+
+    sementeController.listarSementes(
+      filtros: {
+        'semTxNome': valor,
+      },
+    );
+  }
+
+  void abrirJanelaTroca(BuildContext context, Semente semente) {
     int quantidadeSelecionada = 1; // Quantidade inicial selecionada
     final TextEditingController instrucoesController =
         TextEditingController(); // Controlador para as instruções
@@ -53,14 +64,14 @@ class _EscolherSementeTrocaPageState extends State<EscolherSementeTrocaPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Trocar ${sementeUsuario['nome']} pela ${widget.sementeSelecionada.semTxNome}',
+                'Trocar ${semente.semTxNome} pela ${widget.sementeSelecionada.semTxNome}',
                 style:
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              Text(
+              const Text(
                 'Selecione a quantidade para a troca:',
-                style: const TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 10),
               Row(
@@ -82,14 +93,13 @@ class _EscolherSementeTrocaPageState extends State<EscolherSementeTrocaPage> {
                   ),
                   IconButton(
                     icon: const Icon(Icons.add),
-                    onPressed:
-                        quantidadeSelecionada < sementeUsuario['quantidade']
-                            ? () {
-                                setState(() {
-                                  quantidadeSelecionada++;
-                                });
-                              }
-                            : null,
+                    onPressed: quantidadeSelecionada < semente.semNrQuantidade
+                        ? () {
+                            setState(() {
+                              quantidadeSelecionada++;
+                            });
+                          }
+                        : null,
                   ),
                 ],
               ),
@@ -107,7 +117,7 @@ class _EscolherSementeTrocaPageState extends State<EscolherSementeTrocaPage> {
                 onPressed: () {
                   // Confirmar a troca com a quantidade selecionada e as instruções
                   print(
-                      'Confirmado: Trocar $quantidadeSelecionada de ${sementeUsuario['nome']} pela ${widget.sementeSelecionada.semTxNome}');
+                      'Confirmado: Trocar $quantidadeSelecionada de ${semente.semTxNome} pela ${widget.sementeSelecionada.semTxNome}');
                   print(
                       'Instruções fornecidas: ${instrucoesController.text.trim()}');
                   Navigator.pop(context); // Fechar a janela
@@ -123,29 +133,87 @@ class _EscolherSementeTrocaPageState extends State<EscolherSementeTrocaPage> {
 
   @override
   Widget build(BuildContext context) {
+    final sementeController = Provider.of<SementeController>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Trocar por ${widget.sementeSelecionada.semTxNome}'),
       ),
-      body: ListView.builder(
-        itemCount: sementesDoUsuario.length,
-        itemBuilder: (context, index) {
-          final sementeUsuario = sementesDoUsuario[index];
-          return ListTile(
-            leading: Image.network(
-              sementeUsuario['imagemUrl'],
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: TextField(
+              onChanged: atualizarBusca,
+              decoration: InputDecoration(
+                labelText: 'Buscar',
+                hintText: 'Nome',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(
+                      color: Color.fromARGB(255, 32, 17, 17), width: 1),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Colors.grey, width: 1),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Colors.grey, width: 1),
+                ),
+              ),
             ),
-            title: Text(sementeUsuario['nome']),
-            subtitle: Text('Quantidade: ${sementeUsuario['quantidade']}'),
-            trailing: ElevatedButton(
-              onPressed: () => abrirJanelaTroca(context, sementeUsuario),
-              child: const Text('Trocar'),
-            ),
-          );
-        },
+          ),
+          sementeController.isLoading
+              ? _buildLoading()
+              : sementeController.sementes.isEmpty
+                  ? _buildSemSementes()
+                  : _buildGrid(sementeController),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoading() {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _buildSemSementes() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Você não possui sementes cadastradas, para efetuar uma troca é necessário ter sementes para ofertar.',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGrid(SementeController controller) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(1.0),
+        child: ListView.builder(
+          itemCount: controller.sementes.length,
+          itemBuilder: (context, index) {
+            final semente = controller.sementes[index];
+            return ListTile(
+              leading: const Icon(Icons.grain),
+              title: Text(semente.semTxNome),
+              subtitle: Text('Quantidade: ${semente.semNrQuantidade}'),
+              trailing: ElevatedButton(
+                onPressed: () => abrirJanelaTroca(context, semente),
+                child: const Text('Trocar'),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
