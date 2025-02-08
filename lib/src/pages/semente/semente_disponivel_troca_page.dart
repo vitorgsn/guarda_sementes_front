@@ -36,10 +36,8 @@ class _SementeDisponivelTrocaPageState
     controller.listarSementesDisponiveisTroca(
       filtros: {
         'semTxNome': valor,
-        //'sdtTxObservacoes': valor,
-        //'cidTxNome': valor,
-        //'estTxNome': valor,
-        //'estTxSigla': valor,
+        'sdtTxObservacoes': valor,
+        'cidTxNome': valor,
       },
     );
   }
@@ -118,13 +116,13 @@ class _SementeDisponivelTrocaPageState
                           children: [
                             ClipOval(
                               child: Container(
-                                width: 70,
-                                height: 70,
+                                width: 100,
+                                height: 100,
                                 color: Colors.green[100],
                                 child: const Icon(
                                   Icons.grain,
                                   color: Colors.green,
-                                  size: 48,
+                                  size: 32,
                                 ),
                               ),
                             ),

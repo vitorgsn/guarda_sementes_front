@@ -18,11 +18,12 @@ class SementeService {
         'Authorization': 'Bearer $token',
       };
 
-      // Construa a URL com os filtros
       final uri = Uri.parse(baseUrl).replace(
         queryParameters:
             filtros?.map((key, value) => MapEntry(key, value.toString())),
       );
+
+      print(uri);
 
       final response = await http.get(uri, headers: headers);
 
