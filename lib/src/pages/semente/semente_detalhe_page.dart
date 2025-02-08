@@ -228,13 +228,43 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
             ],
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("Cancelar"),
-            ),
-            ElevatedButton(
-              onPressed: _disponibilizarParaTroca,
-              child: const Text("Confirmar"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: _disponibilizarParaTroca,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    child: const Text(
+                      style: TextStyle(color: Colors.white, fontSize: 13),
+                      textAlign: TextAlign.center,
+                      'Confirmar',
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    backgroundColor: Colors.grey,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    child: const Text(
+                      style: TextStyle(color: Colors.white, fontSize: 13),
+                      textAlign: TextAlign.center,
+                      'Cancelar',
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         );

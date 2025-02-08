@@ -20,6 +20,8 @@ class SementePage extends StatefulWidget {
 }
 
 class _SementePageState extends State<SementePage> {
+  final _buscaController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +37,21 @@ class _SementePageState extends State<SementePage> {
       'sort': 'sem_nr_id,desc',
       'armNrId': widget.armNrId,
     });
+  }
+
+  void atualizarBusca(String valor) {
+    _buscaController.text = valor;
+
+    final sementeController =
+        Provider.of<SementeController>(context, listen: false);
+
+    sementeController.listarSementes(
+      filtros: {
+        'armNrId': widget.armNrId,
+        'semTxNome': valor,
+        'semTxDescricao': valor,
+      },
+    );
   }
 
   Future<void> _excluirArmazem() async {
@@ -87,21 +104,44 @@ class _SementePageState extends State<SementePage> {
   Widget build(BuildContext context) {
     final sementeController = Provider.of<SementeController>(context);
 
-    Widget _buildLoading() {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.armTxDescricao),
       ),
-      body: sementeController.isLoading
-          ? _buildLoading()
-          : sementeController.sementes.isEmpty
-              ? _buildSemSementes()
-              : _buildGrid(sementeController),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: TextField(
+              onChanged: atualizarBusca,
+              decoration: InputDecoration(
+                labelText: 'Buscar',
+                hintText: 'Nome ou Descrição',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(
+                      color: Color.fromARGB(255, 32, 17, 17), width: 1),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Colors.grey, width: 1),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Colors.grey, width: 1),
+                ),
+              ),
+            ),
+          ),
+          sementeController.isLoading
+              ? _buildLoading()
+              : sementeController.sementes.isEmpty &&
+                      _buscaController.text.isEmpty
+                  ? _buildSemSementes()
+                  : _buildGrid(sementeController),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.push(
@@ -117,6 +157,12 @@ class _SementePageState extends State<SementePage> {
         },
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  Widget _buildLoading() {
+    return const Center(
+      child: CircularProgressIndicator(),
     );
   }
 
@@ -147,85 +193,89 @@ class _SementePageState extends State<SementePage> {
   }
 
   Widget _buildGrid(SementeController controller) {
-    return Padding(
+    return Expanded(
+        child: Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+        ),
+        itemCount: controller.sementes.length,
+        itemBuilder: (context, index) {
+          final semente = controller.sementes[index];
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SementeDetalhePage(
+                    semNrId: semente.semNrId!,
+                    armNrId: widget.armNrId,
+                  ),
+                ),
+              ).then((_) {
+                _carregarSementes();
+              });
+            },
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
               ),
-              itemCount: controller.sementes.length,
-              itemBuilder: (context, index) {
-                final semente = controller.sementes[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SementeDetalhePage(
-                          semNrId: semente.semNrId!,
-                          armNrId: widget.armNrId,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ClipOval(
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.green[100],
+                        child: const Icon(
+                          Icons.grain,
+                          color: Colors.green,
+                          size: 32,
                         ),
                       ),
-                    ).then((_) {
-                      _carregarSementes();
-                    });
-                  },
-                  child: Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ClipOval(
-                            child: Container(
-                              width: 100,
-                              height: 100,
-                              color: Colors.green[100],
-                              child: const Icon(
-                                Icons.grain,
-                                color: Colors.green,
-                                size: 32,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            semente.semTxNome,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${semente.semNrQuantidade} kg',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                    const SizedBox(height: 8),
+                    Text(
+                      semente.semTxNome,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                );
-              },
+                    const SizedBox(height: 4),
+                    Text(
+                      semente.semTxDescricao!,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${semente.semNrQuantidade} kg',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+          );
+        },
       ),
-    );
+    ));
   }
 }

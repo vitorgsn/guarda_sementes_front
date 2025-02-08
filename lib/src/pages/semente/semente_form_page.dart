@@ -74,7 +74,7 @@ class _SementeFormPageState extends State<SementeFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    InputDecoration _inputDecoration(String label) {
+    InputDecoration inputDecoration(String label) {
       return InputDecoration(
         labelText: label,
         filled: true,
@@ -146,13 +146,13 @@ class _SementeFormPageState extends State<SementeFormPage> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _nomeController,
-                decoration: _inputDecoration('Nome *'),
+                decoration: inputDecoration('Nome *'),
                 validator: (value) => value!.isEmpty ? 'Informe o nome' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _quantidadeController,
-                decoration: _inputDecoration('Quantidade (kg) *'),
+                decoration: inputDecoration('Quantidade (kg) *'),
                 keyboardType: TextInputType.number,
                 inputFormatters: [
                   CurrencyInputFormatter(
@@ -179,7 +179,7 @@ class _SementeFormPageState extends State<SementeFormPage> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _descricaoController,
-                decoration: _inputDecoration('Descrição'),
+                decoration: inputDecoration('Descrição'),
               ),
               const SizedBox(height: 16),
               Row(
