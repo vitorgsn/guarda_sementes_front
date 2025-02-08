@@ -23,8 +23,6 @@ class SementeService {
             filtros?.map((key, value) => MapEntry(key, value.toString())),
       );
 
-      print(uri);
-
       final response = await http.get(uri, headers: headers);
 
       if (response.statusCode == 200) {

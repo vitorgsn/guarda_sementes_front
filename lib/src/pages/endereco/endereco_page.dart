@@ -36,7 +36,7 @@ class _EnderecoPageState extends State<EnderecoPage> {
         backgroundColor: Colors.green,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(1.0),
         child: ListView.builder(
           itemCount: enderecoController.enderecos.length,
           itemBuilder: (context, index) {

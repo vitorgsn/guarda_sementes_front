@@ -195,7 +195,7 @@ class _SementePageState extends State<SementePage> {
   Widget _buildGrid(SementeController controller) {
     return Expanded(
         child: Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(1.0),
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,

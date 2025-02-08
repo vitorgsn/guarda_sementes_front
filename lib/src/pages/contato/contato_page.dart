@@ -35,7 +35,7 @@ class _ContatoPageState extends State<ContatoPage> {
         title: const Text('Contatos'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(1.0),
         child: ListView.builder(
           itemCount: contatoController.contatos.length,
           itemBuilder: (context, index) {
