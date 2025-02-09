@@ -57,8 +57,7 @@ class ContatoController with ChangeNotifier {
 
       return contato;
     } catch (e) {
-      debugPrint('Erro ao buscar contato: $e');
-      return null;
+      rethrow;
     }
   }
 
@@ -68,7 +67,7 @@ class ContatoController with ChangeNotifier {
       _contatos.removeWhere((e) => e.conNrId == conNrId);
       notifyListeners();
     } catch (e) {
-      debugPrint('Erro ao excluir contato: $e');
+      rethrow;
     }
   }
 }

@@ -1,69 +1,93 @@
 class Troca {
-  final String usuNrIdRemetente;
-  final String? usuTxNomeRemetente;
-  final int semNrIdRemetente;
-  final String? semTxNomeRemetente;
-  final double semNrQuantidadeRemetente;
-  final String usuNrIdDestinatario;
-  final String? usuTxNomeDestinatario;
-  final int semNrIdDestinatario;
-  final String? semTxNomeDestinatario;
-  final double semNrQuantidadeDestinatario;
   final String? troNrId;
   final String troTxInstrucoes;
-  final DateTime? sttDtStatusTroca;
   final String? sttTxStatus;
+  final DateTime? sttDtStatusTroca;
+  final DateTime? troDtCreatedAt;
+  final String? usuNrIdRemetente;
+  final String? usuTxNomeRemetente;
+  final int semNrIdSementeRemetente;
+  final String? semTxNomeRemetente;
+  final double troNrQuantidadeSementeRemetente;
+  final String usuNrIdDestinatario;
+  final String? usuTxNomeDestinatario;
+  final int semNrIdSementeDestinatario;
+  final String? semTxNomeDestinatario;
+  final double troNrQuantidadeSementeDestinatario;
 
   Troca({
-    required this.usuNrIdRemetente,
-    this.usuTxNomeRemetente,
-    required this.semNrIdRemetente,
-    this.semTxNomeRemetente,
-    required this.semNrQuantidadeRemetente,
-    required this.usuNrIdDestinatario,
-    this.usuTxNomeDestinatario,
-    required this.semNrIdDestinatario,
-    this.semTxNomeDestinatario,
-    required this.semNrQuantidadeDestinatario,
     this.troNrId,
     required this.troTxInstrucoes,
-    this.sttDtStatusTroca,
     this.sttTxStatus,
+    this.sttDtStatusTroca,
+    this.troDtCreatedAt,
+    this.usuNrIdRemetente,
+    this.usuTxNomeRemetente,
+    required this.semNrIdSementeRemetente,
+    this.semTxNomeRemetente,
+    required this.troNrQuantidadeSementeRemetente,
+    required this.usuNrIdDestinatario,
+    this.usuTxNomeDestinatario,
+    required this.semNrIdSementeDestinatario,
+    this.semTxNomeDestinatario,
+    required this.troNrQuantidadeSementeDestinatario,
   });
 
   factory Troca.fromJson(Map<String, dynamic> json) {
     return Troca(
+      troNrId: json['troNrId'],
+      troTxInstrucoes: json['troTxInstrucoes'] ?? '',
+      sttTxStatus: json['sttTxStatus'],
+      sttDtStatusTroca: json['sttDtStatusTroca'] != null
+          ? DateTime.tryParse(json['sttDtStatusTroca'])
+          : null,
+      troDtCreatedAt: json['troDtCreatedAt'] != null
+          ? DateTime.tryParse(json['troDtCreatedAt'])
+          : null,
       usuNrIdRemetente: json['usuNrIdRemetente'],
       usuTxNomeRemetente: json['usuTxNomeRemetente'],
-      semNrIdRemetente: json['semNrIdRemetente'],
+      semNrIdSementeRemetente: json['semNrIdSementeRemetente'] ?? 0,
       semTxNomeRemetente: json['semTxNomeRemetente'],
-      semNrQuantidadeRemetente: json['semNrQuantidadeRemetente'],
-      usuNrIdDestinatario: json['usuNrIdDestinatario'],
+      troNrQuantidadeSementeRemetente:
+          (json['troNrQuantidadeSementeRemetente'] ?? 0).toDouble(),
+      usuNrIdDestinatario: json['usuNrIdDestinatario'] ?? '',
       usuTxNomeDestinatario: json['usuTxNomeDestinatario'],
-      semNrIdDestinatario: json['semNrIdDestinatario'],
+      semNrIdSementeDestinatario: json['semNrIdSementeDestinatario'] ?? 0,
       semTxNomeDestinatario: json['semTxNomeDestinatario'],
-      semNrQuantidadeDestinatario: json['semNrQuantidadeDestinatario'],
-      troNrId: json['troNrId'],
-      troTxInstrucoes: json['troTxInstrucoes'],
-      sttDtStatusTroca: DateTime.parse(json['sttDtStatusTroca']),
-      sttTxStatus: json['sttTxStatus'],
+      troNrQuantidadeSementeDestinatario:
+          (json['troNrQuantidadeSementeDestinatario'] ?? 0).toDouble(),
     );
   }
 
   @override
   String toString() {
-    return 'Troca{usuNrIdRemetente: $usuNrIdRemetente, usuTxNomeRemetente: $usuTxNomeRemetente, semNrIdRemetente: $semNrIdRemetente, semTxNomeRemetente: $semTxNomeRemetente, semNrQuantidadeRemetente: $semNrQuantidadeRemetente, usuNrIdDestinatario: $usuNrIdDestinatario, usuTxNomeDestinatario: $usuTxNomeDestinatario, semTxNomeDestinatario: $semTxNomeDestinatario, semNrQuantidadeDestinatario: $semNrQuantidadeDestinatario, troNrId: $troNrId, troTxInstrucoes: $troTxInstrucoes, sttDtStatusTroca: $sttDtStatusTroca, sttTxStatus: $sttTxStatus}';
+    return '''Troca{
+                  troNrId: $troNrId,
+                  troTxInstrucoes: $troTxInstrucoes,
+                  sttTxStatus: $sttTxStatus,
+                  sttDtStatusTroca: $sttDtStatusTroca,
+                  troDtCreatedAt: $troDtCreatedAt,
+                  usuNrIdRemetente: $usuNrIdRemetente,
+                  usuTxNomeRemetente: $usuTxNomeRemetente,
+                  semNrIdSementeRemetente: $semNrIdSementeRemetente,
+                  semTxNomeRemetente: $semTxNomeRemetente,
+                  troNrQuantidadeSementeRemetente: $troNrQuantidadeSementeRemetente,
+                  usuNrIdDestinatario: $usuNrIdDestinatario,
+                  usuTxNomeDestinatario: $usuTxNomeDestinatario,
+                  semNrIdSementeDestinatario: $semNrIdSementeDestinatario,
+                  semTxNomeDestinatario: $semTxNomeDestinatario,
+                  troNrQuantidadeSementeDestinatario: $troNrQuantidadeSementeDestinatario
+                  }''';
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'usuNrIdRemetente': usuNrIdRemetente,
-      'semNrIdRemetente': semNrIdRemetente,
-      'semNrQuantidadeRemetente': semNrQuantidadeRemetente,
-      'usuNrIdDestinatario': usuNrIdDestinatario,
-      'semNrIdDestinatario': semNrIdDestinatario,
-      'semNrQuantidadeDestinatario': semNrQuantidadeDestinatario,
       'troTxInstrucoes': troTxInstrucoes,
+      'usuNrIdDestinatario': usuNrIdDestinatario,
+      'semNrIdSementeDestinatario': semNrIdSementeDestinatario,
+      'troNrQuantidadeSementeDestinatario': troNrQuantidadeSementeDestinatario,
+      'semNrIdSementeRemetente': semNrIdSementeRemetente,
+      'troNrQuantidadeSementeRemetente': troNrQuantidadeSementeRemetente,
     };
   }
 }

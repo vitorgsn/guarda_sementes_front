@@ -4,8 +4,7 @@ import 'package:guarda_sementes_front/src/controllers/semente_controller.dart';
 import 'package:guarda_sementes_front/src/controllers/troca_controller.dart';
 import 'package:guarda_sementes_front/src/models/semente.dart';
 import 'package:guarda_sementes_front/src/models/semente_disponivel_troca.dart';
-import 'package:guarda_sementes_front/src/models/semente_troca_form.dart';
-import 'package:guarda_sementes_front/src/models/troca_form.dart';
+import 'package:guarda_sementes_front/src/models/troca.dart';
 import 'package:provider/provider.dart';
 
 class EscolherSementeTrocaPage extends StatefulWidget {
@@ -88,28 +87,18 @@ class _EscolherSementeTrocaPageState extends State<EscolherSementeTrocaPage> {
     final trocaController =
         Provider.of<TrocaController>(context, listen: false);
 
-    SementeTrocaForm sementeDestinatarioTrocaForm = SementeTrocaForm(
-      semNrId: sementeDestinatarioTroca.semNrIdSemente,
-      trsNrQuantidade: sementeDestinatarioTroca.sdtNrQuantidade,
-    );
-
-    SementeTrocaForm sementeRemetenteTrocaForm = SementeTrocaForm(
-      semNrId: sementeRemetenteTroca.semNrId!,
-      trsNrQuantidade:
+    Troca troca = Troca(
+      troTxInstrucoes: _instrucoesParaTrocaController.text,
+      usuNrIdDestinatario: sementeDestinatarioTroca.usuNrId!,
+      semNrIdSementeDestinatario: sementeDestinatarioTroca.semNrIdSemente,
+      troNrQuantidadeSementeDestinatario:
+          sementeDestinatarioTroca.sdtNrQuantidade,
+      semNrIdSementeRemetente: sementeRemetenteTroca.semNrId!,
+      troNrQuantidadeSementeRemetente:
           _converterQuantidade(_quantidadeParaTrocaController.text)!,
     );
 
-    TrocaForm trocaForm = TrocaForm(
-      troTxInstruncoes: _instrucoesParaTrocaController.text,
-      usuNrIdDestinatario: sementeDestinatarioTroca.usuNrId!,
-      ofertadaNasDisponiveis: sementeDestinatarioTrocaForm,
-      ofertadaParaTroca: sementeRemetenteTrocaForm,
-    );
-
-    print('Aqui');
-    print(trocaForm.toString());
-
-    await trocaController.criarTroca(trocaForm);
+    await trocaController.criarTroca(troca);
     Navigator.pop(context);
   }
 

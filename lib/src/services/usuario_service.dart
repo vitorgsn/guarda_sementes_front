@@ -26,14 +26,14 @@ class UsuarioService {
         String responseBody = utf8.decode(response.bodyBytes);
         return Usuario.fromJson(json.decode(responseBody));
       } else {
-        throw (response.body);
+        throw response.body;
       }
     } on http.ClientException {
       throw 'Servidor offline. Tente novamente mais tarde.';
     } on TimeoutException {
       throw 'Tempo de espera da conexão excedido. Tente novamente.';
     } catch (e) {
-      throw ('Erro ao processar, contate o suporte');
+      throw (e.toString());
     }
   }
 }

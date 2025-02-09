@@ -5,7 +5,7 @@ class TrocasPage extends StatefulWidget {
   const TrocasPage({super.key});
 
   @override
-  _TrocasPageState createState() => _TrocasPageState();
+  State<TrocasPage> createState() => _TrocasPageState();
 }
 
 class _TrocasPageState extends State<TrocasPage> {

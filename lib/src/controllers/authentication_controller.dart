@@ -17,12 +17,20 @@ class AuthenticationController extends ChangeNotifier {
   }
 
   Future<void> logout() async {
-    await _authenticationService.logout();
-    _authenticationModel = null;
-    notifyListeners();
+    try {
+      await _authenticationService.logout();
+      _authenticationModel = null;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<bool> isAuthenticated() async {
-    return await _authenticationService.isAuthenticated();
+    try {
+      return await _authenticationService.isAuthenticated();
+    } catch (e) {
+      rethrow;
+    }
   }
 }

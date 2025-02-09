@@ -34,16 +34,24 @@ class AuthenticationService {
     } on TimeoutException {
       throw 'Tempo de espera da conexão excedido. Tente novamente.';
     } catch (e) {
-      rethrow;
+      throw (e.toString());
     }
   }
 
   Future<void> logout() async {
-    await _secureStorage.delete(key: 'token');
+    try {
+      await _secureStorage.delete(key: 'token');
+    } catch (e) {
+      throw ('Erro ao sair, contato o suporte.');
+    }
   }
 
   Future<bool> isAuthenticated() async {
-    final token = await _secureStorage.read(key: 'token');
-    return token != null;
+    try {
+      final token = await _secureStorage.read(key: 'token');
+      return token != null;
+    } catch (e) {
+      throw ("Erro desconhecido, contato o suporte. cod.: 33202");
+    }
   }
 }

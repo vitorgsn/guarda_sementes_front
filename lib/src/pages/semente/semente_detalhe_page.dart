@@ -178,9 +178,28 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
       sdtTxObservacoes: _observacoesParaTrocaController.text,
     );
 
-    await sementeDisponivelTrocaController
-        .cadastrarSementeDisponivelTroca(semente);
-    Navigator.pop(context);
+    try {
+      await sementeDisponivelTrocaController
+          .cadastrarSementeDisponivelTroca(semente);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Semente disponibilizada para troca com sucesso!')),
+      );
+
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.redAccent,
+          content: Text(
+            e.toString(),
+            textAlign: TextAlign.center,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   void _mostrarDialogoTroca() {

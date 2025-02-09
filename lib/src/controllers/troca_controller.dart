@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:guarda_sementes_front/src/models/troca.dart';
-import 'package:guarda_sementes_front/src/models/troca_form.dart';
 import 'package:guarda_sementes_front/src/services/troca_service.dart';
 
 class TrocaController with ChangeNotifier {
@@ -17,9 +16,10 @@ class TrocaController with ChangeNotifier {
     }
   }
 
-  Future<void> criarTroca(TrocaForm trocaForm) async {
+  Future<void> criarTroca(Troca troca) async {
     try {
-      await _trocaService.criarTroca(trocaForm);
+      final novaTroca = await _trocaService.criarTroca(troca);
+      _trocas.add(novaTroca!);
       notifyListeners();
     } catch (e) {
       rethrow;

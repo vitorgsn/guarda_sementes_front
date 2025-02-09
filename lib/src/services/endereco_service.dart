@@ -12,28 +12,36 @@ class EnderecoService {
 
   Future<List<Endereco>> listarEnderecos(
       {Map<String, dynamic>? filtros}) async {
-    token = (await _storage.read(key: 'token'))!;
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
+    try {
+      token = (await _storage.read(key: 'token'))!;
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
 
-    final uri = Uri.parse(baseUrl).replace(
-      queryParameters:
-          filtros?.map((key, value) => MapEntry(key, value.toString())),
-    );
+      final uri = Uri.parse(baseUrl).replace(
+        queryParameters:
+            filtros?.map((key, value) => MapEntry(key, value.toString())),
+      );
 
-    final response = await http.get(uri, headers: headers);
+      final response = await http.get(uri, headers: headers);
 
-    if (response.statusCode == 200) {
-      String responseBody = utf8.decode(response.bodyBytes);
-      Map<String, dynamic> jsonResponse = json.decode(responseBody);
-      List<dynamic> enderecosJson = jsonResponse['content'];
-      return enderecosJson
-          .map((endereco) => Endereco.fromJson(endereco))
-          .toList();
-    } else {
-      throw (response.body);
+      if (response.statusCode == 200) {
+        String responseBody = utf8.decode(response.bodyBytes);
+        Map<String, dynamic> jsonResponse = json.decode(responseBody);
+        List<dynamic> enderecosJson = jsonResponse['content'];
+        return enderecosJson
+            .map((endereco) => Endereco.fromJson(endereco))
+            .toList();
+      } else {
+        throw response.body;
+      }
+    } on http.ClientException {
+      throw 'Servidor offline. Tente novamente mais tarde.';
+    } on TimeoutException {
+      throw 'Tempo de espera da conexão excedido. Tente novamente.';
+    } catch (e) {
+      throw (e.toString());
     }
   }
 
@@ -53,14 +61,14 @@ class EnderecoService {
       if (response.statusCode == 201) {
         return Endereco.fromJson(json.decode(response.body));
       } else {
-        throw (response.body);
+        throw response.body;
       }
     } on http.ClientException {
       throw 'Servidor offline. Tente novamente mais tarde.';
     } on TimeoutException {
       throw 'Tempo de espera da conexão excedido. Tente novamente.';
     } catch (e) {
-      throw ('Erro ao processar, contate o suporte');
+      throw (e.toString());
     }
   }
 
@@ -83,14 +91,14 @@ class EnderecoService {
       if (response.statusCode == 201) {
         return Endereco.fromJson(json.decode(response.body));
       } else {
-        throw (response.body);
+        throw response.body;
       }
     } on http.ClientException {
       throw 'Servidor offline. Tente novamente mais tarde.';
     } on TimeoutException {
       throw 'Tempo de espera da conexão excedido. Tente novamente.';
     } catch (e) {
-      throw ('Erro ao processar, contate o suporte');
+      throw (e.toString());
     }
   }
 
@@ -109,14 +117,14 @@ class EnderecoService {
         final decodedBody = utf8.decode(response.bodyBytes);
         return Endereco.fromJson(json.decode(decodedBody));
       } else {
-        throw (response.body);
+        throw response.body;
       }
     } on http.ClientException {
       throw 'Servidor offline. Tente novamente mais tarde.';
     } on TimeoutException {
       throw 'Tempo de espera excedido. Tente novamente.';
     } catch (e) {
-      throw 'Erro ao processar a requisição: $e';
+      throw (e.toString());
     }
   }
 
@@ -132,14 +140,14 @@ class EnderecoService {
       final response = await http.delete(uri, headers: headers);
 
       if (response.statusCode != 204) {
-        throw (response.body);
+        throw response.body;
       }
     } on http.ClientException {
       throw 'Servidor offline. Tente novamente mais tarde.';
     } on TimeoutException {
       throw 'Tempo de espera excedido. Tente novamente.';
     } catch (e) {
-      throw 'Erro ao excluir o endereço: $e';
+      throw (e.toString());
     }
   }
 }

@@ -35,14 +35,14 @@ class SementeDisponivelTrocaService {
             .map((semente) => SementeDisponivelTroca.fromJson(semente))
             .toList();
       } else {
-        throw (response.body);
+        throw response.body;
       }
     } on http.ClientException {
       throw 'Servidor offline. Tente novamente mais tarde.';
     } on TimeoutException {
       throw 'Tempo de espera da conexão excedido. Tente novamente.';
     } catch (e) {
-      throw ('Erro ao processar, contate o suporte');
+      throw (e.toString());
     }
   }
 
@@ -63,14 +63,14 @@ class SementeDisponivelTrocaService {
       if (response.statusCode == 201) {
         return SementeDisponivelTroca.fromJson(json.decode(response.body));
       } else {
-        throw (response.body);
+        throw response.body;
       }
     } on http.ClientException {
       throw 'Servidor offline. Tente novamente mais tarde.';
     } on TimeoutException {
       throw 'Tempo de espera da conexão excedido. Tente novamente.';
     } catch (e) {
-      throw ('Erro ao processar, contate o suporte');
+      throw (e.toString());
     }
   }
 }

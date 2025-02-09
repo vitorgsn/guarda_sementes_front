@@ -12,28 +12,36 @@ class CategoriaArmazemService {
 
   Future<List<CategoriaArmazem>> listarCategoriasArmazem(
       {Map<String, dynamic>? filtros}) async {
-    token = (await _storage.read(key: 'token'))!;
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
+    try {
+      token = (await _storage.read(key: 'token'))!;
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
 
-    final uri = Uri.parse(baseUrl).replace(
-      queryParameters:
-          filtros?.map((key, value) => MapEntry(key, value.toString())),
-    );
+      final uri = Uri.parse(baseUrl).replace(
+        queryParameters:
+            filtros?.map((key, value) => MapEntry(key, value.toString())),
+      );
 
-    final response = await http.get(uri, headers: headers);
+      final response = await http.get(uri, headers: headers);
 
-    if (response.statusCode == 200) {
-      String responseBody = utf8.decode(response.bodyBytes);
-      Map<String, dynamic> jsonResponse = json.decode(responseBody);
-      List<dynamic> categoriasJson = jsonResponse['content'];
-      return categoriasJson
-          .map((categoria) => CategoriaArmazem.fromJson(categoria))
-          .toList();
-    } else {
-      throw Exception('Falha ao carregar categorias');
+      if (response.statusCode == 200) {
+        String responseBody = utf8.decode(response.bodyBytes);
+        Map<String, dynamic> jsonResponse = json.decode(responseBody);
+        List<dynamic> categoriasJson = jsonResponse['content'];
+        return categoriasJson
+            .map((categoria) => CategoriaArmazem.fromJson(categoria))
+            .toList();
+      } else {
+        throw response.body;
+      }
+    } on http.ClientException {
+      throw 'Servidor offline. Tente novamente mais tarde.';
+    } on TimeoutException {
+      throw 'Tempo de espera da conexão excedido. Tente novamente.';
+    } catch (e) {
+      throw (e.toString());
     }
   }
 }

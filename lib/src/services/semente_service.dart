@@ -33,14 +33,14 @@ class SementeService {
             .map((semente) => Semente.fromJson(semente))
             .toList();
       } else {
-        throw (response.body);
+        throw response.body;
       }
     } on http.ClientException {
       throw 'Servidor offline. Tente novamente mais tarde.';
     } on TimeoutException {
       throw 'Tempo de espera da conexão excedido. Tente novamente.';
     } catch (e) {
-      throw ('Erro ao processar, contate o suporte');
+      throw (e.toString());
     }
   }
 
@@ -60,14 +60,14 @@ class SementeService {
       if (response.statusCode == 201) {
         return Semente.fromJson(json.decode(response.body));
       } else {
-        throw (response.body);
+        throw response.body;
       }
     } on http.ClientException {
       throw 'Servidor offline. Tente novamente mais tarde.';
     } on TimeoutException {
       throw 'Tempo de espera da conexão excedido. Tente novamente.';
     } catch (e) {
-      throw ('Erro ao processar, contate o suporte');
+      throw (e.toString());
     }
   }
 
@@ -90,14 +90,14 @@ class SementeService {
       if (response.statusCode == 201) {
         return Semente.fromJson(json.decode(response.body));
       } else {
-        throw 'Falha ao atualizar a semente';
+        throw response.body;
       }
     } on http.ClientException {
       throw 'Servidor offline. Tente novamente mais tarde.';
     } on TimeoutException {
       throw 'Tempo de espera da conexão excedido. Tente novamente.';
     } catch (e) {
-      throw ('Erro ao processar, contate o suporte');
+      throw (e.toString());
     }
   }
 
@@ -116,14 +116,14 @@ class SementeService {
         final decodedBody = utf8.decode(response.bodyBytes);
         return Semente.fromJson(json.decode(decodedBody));
       } else {
-        throw 'Falha ao buscar a semente. Código: ${response.statusCode}';
+        throw response.body;
       }
     } on http.ClientException {
       throw 'Servidor offline. Tente novamente mais tarde.';
     } on TimeoutException {
       throw 'Tempo de espera excedido. Tente novamente.';
     } catch (e) {
-      throw 'Erro ao processar a requisição: $e';
+      throw (e.toString());
     }
   }
 
@@ -146,7 +146,7 @@ class SementeService {
     } on TimeoutException {
       throw 'Tempo de espera excedido. Tente novamente.';
     } catch (e) {
-      throw 'Erro ao excluir o endereço: $e';
+      throw (e.toString());
     }
   }
 }
