@@ -5,6 +5,7 @@ class SementeDisponivelTroca {
   final String sdtTxObservacoes;
   final int semNrIdSemente;
   final String? semTxNome;
+  final String? usuNrId;
   final int? cidNrId;
   final String? cidTxNome;
   final int? estNrId;
@@ -18,6 +19,7 @@ class SementeDisponivelTroca {
     required this.sdtTxObservacoes,
     required this.semNrIdSemente,
     this.semTxNome,
+    this.usuNrId,
     this.cidNrId,
     this.cidTxNome,
     this.estNrId,
@@ -33,6 +35,7 @@ class SementeDisponivelTroca {
       sdtTxObservacoes: json['sdtTxObservacoes'],
       semNrIdSemente: json['semNrIdSemente'],
       semTxNome: json['semTxNome'],
+      usuNrId: json['usuNrId'],
       cidNrId: json['cidNrId'],
       cidTxNome: json['cidTxNome'],
       estNrId: json['estNrId'],
@@ -43,7 +46,7 @@ class SementeDisponivelTroca {
 
   @override
   String toString() {
-    return 'SementeDisponivelTroca{sdtNrId: $sdtNrId, sdtBlDisponivel: $sdtBlDisponivel, sdtNrQuantidade: $sdtNrQuantidade, sdtTxObservacoes: $sdtTxObservacoes, semNrIdSemente: $semNrIdSemente, semTxNome: $semTxNome, cidNrId: $cidNrId, cidTxNome: $cidTxNome, estNrId: $estNrId, estTxNome: $estTxNome, estTxSigla: $estTxSigla}';
+    return 'SementeDisponivelTroca{sdtNrId: $sdtNrId, sdtBlDisponivel: $sdtBlDisponivel, sdtNrQuantidade: $sdtNrQuantidade, sdtTxObservacoes: $sdtTxObservacoes, semNrIdSemente: $semNrIdSemente, semTxNome: $semTxNome, usuNrId: $usuNrId, cidNrId: $cidNrId, cidTxNome: $cidTxNome, estNrId: $estNrId, estTxNome: $estTxNome, estTxSigla: $estTxSigla}';
   }
 
   Map<String, dynamic> toJson() {

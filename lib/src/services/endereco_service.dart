@@ -28,8 +28,8 @@ class EnderecoService {
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
       Map<String, dynamic> jsonResponse = json.decode(responseBody);
-      List<dynamic> endrecosJson = jsonResponse['content'];
-      return endrecosJson
+      List<dynamic> enderecosJson = jsonResponse['content'];
+      return enderecosJson
           .map((endereco) => Endereco.fromJson(endereco))
           .toList();
     } else {
