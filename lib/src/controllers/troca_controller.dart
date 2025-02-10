@@ -6,13 +6,20 @@ class TrocaController with ChangeNotifier {
   final TrocaService _trocaService = TrocaService();
   List<Troca> _trocas = [];
   List<Troca> get trocas => _trocas;
+  bool isLoading = false;
 
   Future<void> listarTrocas({Map<String, dynamic>? filtros}) async {
+    isLoading = true;
+    notifyListeners();
+
     try {
       _trocas = await _trocaService.listarTrocas(filtros: filtros);
       notifyListeners();
     } catch (e) {
       rethrow;
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 
@@ -52,6 +59,33 @@ class TrocaController with ChangeNotifier {
     try {
       await _trocaService.excluirTroca(troNrId);
       _trocas.removeWhere((t) => t.troNrId == troNrId);
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> aceitarTroca(String troNrId) async {
+    try {
+      await _trocaService.aceitarTroca(troNrId);
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> recusarTroca(String troNrId) async {
+    try {
+      await _trocaService.recusarTroca(troNrId);
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> cancelarTroca(String troNrId) async {
+    try {
+      await _trocaService.cancelarTroca(troNrId);
       notifyListeners();
     } catch (e) {
       rethrow;

@@ -119,4 +119,73 @@ class TrocaService {
       throw (e.toString());
     }
   }
+
+  Future<void> aceitarTroca(String troNrId) async {
+    try {
+      token = (await _storage.read(key: 'token'))!;
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      final uri = Uri.parse('$baseUrl/$troNrId/aceitar');
+      final response = await http.post(uri, headers: headers);
+
+      if (response.statusCode != 204) {
+        throw response.body;
+      }
+    } on http.ClientException {
+      throw 'Servidor offline. Tente novamente mais tarde.';
+    } on TimeoutException {
+      throw 'Tempo de espera excedido. Tente novamente.';
+    } catch (e) {
+      throw (e.toString());
+    }
+  }
+
+  Future<void> recusarTroca(String troNrId) async {
+    try {
+      token = (await _storage.read(key: 'token'))!;
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      final uri = Uri.parse('$baseUrl/$troNrId/recusar');
+      final response = await http.post(uri, headers: headers);
+
+      if (response.statusCode != 204) {
+        throw response.body;
+      }
+    } on http.ClientException {
+      throw 'Servidor offline. Tente novamente mais tarde.';
+    } on TimeoutException {
+      throw 'Tempo de espera excedido. Tente novamente.';
+    } catch (e) {
+      throw (e.toString());
+    }
+  }
+
+  Future<void> cancelarTroca(String troNrId) async {
+    try {
+      token = (await _storage.read(key: 'token'))!;
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      final uri = Uri.parse('$baseUrl/$troNrId/cancelar');
+      final response = await http.post(uri, headers: headers);
+
+      if (response.statusCode != 204) {
+        throw response.body;
+      }
+    } on http.ClientException {
+      throw 'Servidor offline. Tente novamente mais tarde.';
+    } on TimeoutException {
+      throw 'Tempo de espera excedido. Tente novamente.';
+    } catch (e) {
+      throw (e.toString());
+    }
+  }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guarda_sementes_front/src/pages/perfil/perfil_page.dart';
 import 'package:guarda_sementes_front/src/pages/armazem/armazem_page.dart';
 import 'package:guarda_sementes_front/src/pages/semente/semente_disponivel_troca_page.dart';
-import 'package:guarda_sementes_front/src/pages/troca/trocas_page.dart';
+import 'package:guarda_sementes_front/src/pages/troca/troca_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
         onPageChanged: setPaginaAtual,
         children: const [
           SementeDisponivelTrocaPage(),
-          TrocasPage(),
+          TrocaPage(),
           ArmazemPage(),
           PerfilPage()
         ],

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:guarda_sementes_front/src/controllers/troca_controller.dart';
+import 'package:guarda_sementes_front/src/models/troca.dart';
+import 'package:provider/provider.dart';
 
 class TrocaDetalhePage extends StatefulWidget {
-  final Map<String, String> troca;
+  final Troca troca;
 
   const TrocaDetalhePage({super.key, required this.troca});
 
@@ -10,9 +13,130 @@ class TrocaDetalhePage extends StatefulWidget {
 }
 
 class _TrocaDetalhePageState extends State<TrocaDetalhePage> {
+  Future<void> _aceitarTroca() async {
+    bool confirmado = await _mostrarDialogoConfirmacao("ACEITAR");
+    if (confirmado) {
+      try {
+        final trocaController =
+            Provider.of<TrocaController>(context, listen: false);
+        await trocaController.aceitarTroca(widget.troca.troNrId!);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Troca aceita com sucesso!')),
+        );
+
+        Navigator.pop(context);
+      } catch (e) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.toString())));
+      }
+    }
+  }
+
+  Future<void> _recusarTroca() async {
+    bool confirmado = await _mostrarDialogoConfirmacao("RECUSAR");
+    if (confirmado) {
+      try {
+        final trocaController =
+            Provider.of<TrocaController>(context, listen: false);
+        await trocaController.recusarTroca(widget.troca.troNrId!);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Troca recusada com sucesso!')),
+        );
+
+        Navigator.pop(context);
+      } catch (e) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.toString())));
+      }
+    }
+  }
+
+  Future<void> _cancelarTroca() async {
+    bool confirmado = await _mostrarDialogoConfirmacao("CANCELAR");
+    if (confirmado) {
+      try {
+        final trocaController =
+            Provider.of<TrocaController>(context, listen: false);
+        await trocaController.cancelarTroca(widget.troca.troNrId!);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Troca cancelada com sucesso!')),
+        );
+
+        Navigator.pop(context);
+      } catch (e) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.toString())));
+      }
+    }
+  }
+
+  Future<bool> _mostrarDialogoConfirmacao(String tipoAcao) async {
+    return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Confirmar Aceite"),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Tem certeza de que deseja $tipoAcao esta troca?\n'
+                    'Esta ação não pode ser desfeita.',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 5,
+                  backgroundColor: Colors.grey,
+                ),
+                onPressed: () => Navigator.pop(context, false),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+                  child: const Text(
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    textAlign: TextAlign.center,
+                    'Cancelar',
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 5,
+                  backgroundColor: Theme.of(context).primaryColor,
+                ),
+                onPressed: () => Navigator.pop(context, true),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+                  child: const Text(
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    textAlign: TextAlign.center,
+                    'Aceitar',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final String status = widget.troca['sttTxStatus'] ?? 'Indefinido';
+    final String status = widget.troca.sttTxStatus!;
 
     return Scaffold(
       appBar: AppBar(
@@ -24,20 +148,27 @@ class _TrocaDetalhePageState extends State<TrocaDetalhePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Remetente: ${widget.troca['usuTxNomeRemetente']}',
+              '${widget.troca.troNrId}',
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Remetente: ${widget.troca.usuTxNomeRemetente}',
               style: const TextStyle(fontSize: 18),
             ),
             Text(
-              'Semente: ${widget.troca['semTxNomeRemetente']} - ${widget.troca['semNrQuantidadeRemetente']} kg',
+              'Semente: ${widget.troca.semTxNomeRemetente} - ${widget.troca.troNrQuantidadeSementeRemetente} kg',
               style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 10),
             Text(
-              'Destinatário: ${widget.troca['usuTxNomeDestinatario']}',
+              'Destinatário: ${widget.troca.usuTxNomeDestinatario}',
               style: const TextStyle(fontSize: 18),
             ),
             Text(
-              'Semente: ${widget.troca['semTxNomeDestinatario']} - ${widget.troca['semNrQuantidadeDestinatario']} kg',
+              'Semente: ${widget.troca.semTxNomeDestinatario} - ${widget.troca.troNrQuantidadeSementeDestinatario} kg',
               style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 20),
@@ -46,16 +177,16 @@ class _TrocaDetalhePageState extends State<TrocaDetalhePage> {
               style: const TextStyle(fontSize: 18),
             ),
             Text(
-              'Data: ${widget.troca['sttDtStatusTroca']}',
+              'Data: ${widget.troca.sttDtStatusTroca}',
               style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 20),
             Text(
-              'Instruções: ${widget.troca['troTxInstrucoes']}',
+              'Instruções: ${widget.troca.troTxInstrucoes}',
               style: const TextStyle(fontSize: 18),
             ),
             const Spacer(),
-            if (status == 'Pendente') ...[
+            if (status == 'PENDENTE') ...[
               const Text(
                 'Ações Disponíveis:',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -63,69 +194,54 @@ class _TrocaDetalhePageState extends State<TrocaDetalhePage> {
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      // Implementar lógica para aceitar troca
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Troca aceita!')),
-                      );
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.check,
-                      color: Colors.white,
-                    ),
-                    label: const Text(
-                      'Aceitar',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
+                  ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                    ),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      // Implementar lógica para recusar troca
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Troca recusada!')),
-                      );
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.cancel,
-                      color: Colors.white,
-                    ),
-                    label: const Text(
-                      'Recusar',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
                       backgroundColor: Colors.red,
                     ),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      // Implementar lógica para cancelar troca
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Troca cancelada!')),
-                      );
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.remove_circle,
-                      color: Colors.white,
-                    ),
-                    label: const Text(
-                      'Cancelar',
-                      style: TextStyle(
-                        color: Colors.white,
+                    onPressed: _recusarTroca,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 7),
+                      child: const Text(
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        textAlign: TextAlign.center,
+                        'Recusar',
                       ),
                     ),
+                  ),
+                  ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                      elevation: 5,
                       backgroundColor: Colors.grey,
+                    ),
+                    onPressed: _cancelarTroca,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 7),
+                      child: const Text(
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        textAlign: TextAlign.center,
+                        'Cancelar',
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      backgroundColor: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: _aceitarTroca,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 7),
+                      child: const Text(
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        textAlign: TextAlign.center,
+                        'Aceitar',
+                      ),
                     ),
                   ),
                 ],
