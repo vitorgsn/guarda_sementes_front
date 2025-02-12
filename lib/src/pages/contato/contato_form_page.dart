@@ -121,22 +121,6 @@ class _ContatoFormPageState extends State<ContatoFormPage> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       elevation: 5,
-                      backgroundColor: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: _salvarContato,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 15),
-                      child: const Text(
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                        textAlign: TextAlign.center,
-                        'Salvar',
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 5,
                       backgroundColor: Colors.grey,
                     ),
                     onPressed: () => Navigator.pop(context),
@@ -147,6 +131,22 @@ class _ContatoFormPageState extends State<ContatoFormPage> {
                         style: TextStyle(color: Colors.white, fontSize: 15),
                         textAlign: TextAlign.center,
                         'Cancelar',
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      backgroundColor: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: _salvarContato,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      child: const Text(
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        textAlign: TextAlign.center,
+                        'Salvar',
                       ),
                     ),
                   ),

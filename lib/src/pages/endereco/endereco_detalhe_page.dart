@@ -240,22 +240,6 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     elevation: 5,
-                    backgroundColor: Theme.of(context).primaryColor,
-                  ),
-                  onPressed: _salvarEndereco,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 15),
-                    child: const Text(
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                      textAlign: TextAlign.center,
-                      'Salvar',
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 5,
                     backgroundColor: Colors.red,
                   ),
                   onPressed: _excluirEndereco,
@@ -266,6 +250,22 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
                       style: TextStyle(color: Colors.white, fontSize: 15),
                       textAlign: TextAlign.center,
                       'Excluir',
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: _salvarEndereco,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    child: const Text(
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      textAlign: TextAlign.center,
+                      'Salvar',
                     ),
                   ),
                 ),

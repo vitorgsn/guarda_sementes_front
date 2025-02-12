@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:guarda_sementes_front/src/SplashScreen.dart';
 import 'package:guarda_sementes_front/src/pages/login/login_page.dart';
 
 class MyApp extends StatefulWidget {
@@ -33,7 +34,7 @@ class _MyAppState extends State<MyApp> {
                 }
                 return const TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Color.fromRGBO(80, 80, 80, 1),
                 );
               },
             ),
@@ -42,17 +43,17 @@ class _MyAppState extends State<MyApp> {
                 if (states.contains(WidgetState.selected)) {
                   return const IconThemeData(color: Colors.black);
                 }
-                return const IconThemeData(color: Colors.black87);
+                return const IconThemeData(
+                    color: Color.fromRGBO(80, 80, 80, 1));
               },
             ),
           ),
           appBarTheme: AppBarTheme(
             centerTitle: true,
             backgroundColor: const Color.fromRGBO(76, 175, 80, 0.8),
-            titleTextStyle: GoogleFonts.bungeeInline(
+            titleTextStyle: GoogleFonts.bungee(
               textStyle: const TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(80, 80, 80, 1),
                 fontSize: 20,
               ),
             ),
@@ -63,8 +64,9 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) {
         return SafeArea(child: child!);
       },
-      initialRoute: '/login',
+      initialRoute: '/',
       routes: {
+        '/': (context) => const SplashScreen(),
         '/login': (context) => const LoginPage(),
       },
     );

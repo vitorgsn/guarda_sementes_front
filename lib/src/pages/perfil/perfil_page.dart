@@ -34,8 +34,7 @@ class _PerfilPageState extends State<PerfilPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('PERFIL'),
-        centerTitle: true,
+        title: const Text('Perfil'),
         automaticallyImplyLeading: false,
       ),
       body: Center(

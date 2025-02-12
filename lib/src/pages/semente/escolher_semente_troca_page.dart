@@ -172,6 +172,22 @@ class _EscolherSementeTrocaPageState extends State<EscolherSementeTrocaPage> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     elevation: 5,
+                    backgroundColor: Colors.grey,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    child: const Text(
+                      style: TextStyle(color: Colors.white, fontSize: 13),
+                      textAlign: TextAlign.center,
+                      'Cancelar',
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
                   onPressed: () => _proporTroca(
@@ -185,22 +201,6 @@ class _EscolherSementeTrocaPageState extends State<EscolherSementeTrocaPage> {
                       style: TextStyle(color: Colors.white, fontSize: 13),
                       textAlign: TextAlign.center,
                       'Confirmar',
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 5,
-                    backgroundColor: Colors.grey,
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    child: const Text(
-                      style: TextStyle(color: Colors.white, fontSize: 13),
-                      textAlign: TextAlign.center,
-                      'Cancelar',
                     ),
                   ),
                 ),

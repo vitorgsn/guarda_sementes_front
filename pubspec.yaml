@@ -42,6 +42,8 @@ dependencies:
   image_picker: ^1.1.2
   flutter_multi_formatter: ^2.13.0
   flutter_masked_text2: ^0.9.1
+  flutter_native_splash: ^2.4.4
+  flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +55,18 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+
+flutter_native_splash:
+  color: "#4CAF50"
+  image: "lib/assets/images/splash.png"
+  android: true
+  ios: true
+
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "lib/assets/images/icon.png"
+  remove_alpha_ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

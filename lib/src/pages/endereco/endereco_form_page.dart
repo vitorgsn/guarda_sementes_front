@@ -188,22 +188,6 @@ class _EnderecoFormPageState extends State<EnderecoFormPage> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       elevation: 5,
-                      backgroundColor: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: _salvarEndereco,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 15),
-                      child: const Text(
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                        textAlign: TextAlign.center,
-                        'Salvar',
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 5,
                       backgroundColor: Colors.grey,
                     ),
                     onPressed: () => Navigator.pop(context),
@@ -214,6 +198,22 @@ class _EnderecoFormPageState extends State<EnderecoFormPage> {
                         style: TextStyle(color: Colors.white, fontSize: 15),
                         textAlign: TextAlign.center,
                         'Cancelar',
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      backgroundColor: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: _salvarEndereco,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      child: const Text(
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        textAlign: TextAlign.center,
+                        'Salvar',
                       ),
                     ),
                   ),

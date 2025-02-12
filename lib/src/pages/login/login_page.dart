@@ -47,8 +47,10 @@ class _LoginPageState extends State<LoginPage> {
                             SizedBox(
                               child: Text(
                                 'Guarda Sementes',
-                                style: GoogleFonts.bungeeInline(
-                                    color: Colors.white, fontSize: 30),
+                                style: GoogleFonts.bungee(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                ),
                               ),
                             ),
                             const SizedBox(
@@ -145,6 +147,26 @@ class _LoginPageState extends State<LoginPage> {
                                       children: [
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
+                                              elevation: 5,
+                                              backgroundColor:
+                                                  Colors.lightBlueAccent),
+                                          onPressed: () {
+                                            debugPrint('ok');
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 15, vertical: 15),
+                                            child: const Text(
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 15,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                                'Cadastre-se'),
+                                          ),
+                                        ),
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
                                             elevation: 5,
                                             backgroundColor:
                                                 Theme.of(context).primaryColor,
@@ -211,27 +233,6 @@ class _LoginPageState extends State<LoginPage> {
                                             ),
                                           ),
                                         ),
-                                        ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                elevation: 5,
-                                                backgroundColor:
-                                                    Colors.lightBlueAccent),
-                                            onPressed: () {
-                                              debugPrint('ok');
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15,
-                                                      vertical: 15),
-                                              child: const Text(
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 15,
-                                                  ),
-                                                  textAlign: TextAlign.center,
-                                                  'Cadastre-se'),
-                                            )),
                                       ],
                                     ),
                                   ],

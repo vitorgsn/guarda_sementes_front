@@ -254,22 +254,6 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     elevation: 5,
-                    backgroundColor: Theme.of(context).primaryColor,
-                  ),
-                  onPressed: _disponibilizarParaTroca,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    child: const Text(
-                      style: TextStyle(color: Colors.white, fontSize: 13),
-                      textAlign: TextAlign.center,
-                      'Confirmar',
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 5,
                     backgroundColor: Colors.grey,
                   ),
                   onPressed: () => Navigator.pop(context),
@@ -280,6 +264,22 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
                       style: TextStyle(color: Colors.white, fontSize: 13),
                       textAlign: TextAlign.center,
                       'Cancelar',
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: _disponibilizarParaTroca,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    child: const Text(
+                      style: TextStyle(color: Colors.white, fontSize: 13),
+                      textAlign: TextAlign.center,
+                      'Confirmar',
                     ),
                   ),
                 ),
@@ -372,22 +372,6 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     elevation: 5,
-                    backgroundColor: Theme.of(context).primaryColor,
-                  ),
-                  onPressed: _salvarSemente,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 15),
-                    child: const Text(
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                      textAlign: TextAlign.center,
-                      'Salvar',
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 5,
                     backgroundColor: Colors.red,
                   ),
                   onPressed: _excluirSemente,
@@ -398,6 +382,22 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
                       style: TextStyle(color: Colors.white, fontSize: 15),
                       textAlign: TextAlign.center,
                       'Excluir',
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: _salvarSemente,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    child: const Text(
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      textAlign: TextAlign.center,
+                      'Salvar',
                     ),
                   ),
                 ),
