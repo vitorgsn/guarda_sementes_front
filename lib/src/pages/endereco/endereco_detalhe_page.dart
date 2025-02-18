@@ -140,7 +140,7 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
         Navigator.pop(context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Erro ao excluir endereço: $e")),
+          SnackBar(content: Text(e.toString())),
         );
       }
     }
@@ -148,7 +148,7 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
 
   @override
   Widget build(BuildContext context) {
-    InputDecoration _inputDecoration(String label) {
+    InputDecoration inputDecoration(String label) {
       return InputDecoration(
         labelText: label,
         filled: true,
@@ -180,7 +180,7 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
             DropdownButtonFormField<int>(
               value: _cidadeSelecionadaId,
               hint: const Text('Selecione uma cidade'),
-              decoration: _inputDecoration('Cidade *'),
+              decoration: inputDecoration('Cidade *'),
               items: _cidades.map((cidade) {
                 return DropdownMenuItem<int>(
                   value: cidade.cidNrId,
@@ -198,22 +198,22 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
             const SizedBox(height: 16),
             TextField(
               controller: _bairroController,
-              decoration: _inputDecoration('Bairro *'),
+              decoration: inputDecoration('Bairro *'),
             ),
             const SizedBox(height: 8),
             TextField(
               controller: _logradouroController,
-              decoration: _inputDecoration('Logradouro *'),
+              decoration: inputDecoration('Logradouro *'),
             ),
             const SizedBox(height: 8),
             TextField(
               controller: _numeroController,
-              decoration: _inputDecoration('Número *'),
+              decoration: inputDecoration('Número *'),
             ),
             const SizedBox(height: 8),
             TextField(
               controller: _referenciaController,
-              decoration: _inputDecoration('Referência *'),
+              decoration: inputDecoration('Referência *'),
             ),
             const SizedBox(height: 16),
             Row(

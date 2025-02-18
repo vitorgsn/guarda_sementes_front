@@ -153,25 +153,41 @@ class _TrocaDetalhePageState extends State<TrocaDetalhePage> {
                 fontSize: 12,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             Text(
               'Remetente: ${widget.troca.usuTxNomeRemetente}',
               style: const TextStyle(fontSize: 18),
             ),
             Text(
-              'Semente: ${widget.troca.semTxNomeRemetente} - ${widget.troca.troNrQuantidadeSementeRemetente} kg',
+              'Telefone: ${widget.troca.conTxNumeroRemetente}',
               style: const TextStyle(fontSize: 18),
             ),
-            const SizedBox(height: 10),
+            Text(
+              'Semente: ${widget.troca.semTxNomeRemetente}',
+              style: const TextStyle(fontSize: 18),
+            ),
+            Text(
+              'Quantidade: ${widget.troca.troNrQuantidadeSementeRemetente} kg',
+              style: const TextStyle(fontSize: 18),
+            ),
+            const SizedBox(height: 30),
             Text(
               'Destinatário: ${widget.troca.usuTxNomeDestinatario}',
               style: const TextStyle(fontSize: 18),
             ),
             Text(
-              'Semente: ${widget.troca.semTxNomeDestinatario} - ${widget.troca.troNrQuantidadeSementeDestinatario} kg',
+              'Telefone: ${widget.troca.conTxNumeroDestinatario}',
               style: const TextStyle(fontSize: 18),
             ),
-            const SizedBox(height: 20),
+            Text(
+              'Semente: ${widget.troca.semTxNomeDestinatario}',
+              style: const TextStyle(fontSize: 18),
+            ),
+            Text(
+              'Quantidade: ${widget.troca.troNrQuantidadeSementeDestinatario} kg',
+              style: const TextStyle(fontSize: 18),
+            ),
+            const SizedBox(height: 30),
             Text(
               'Status: $status',
               style: const TextStyle(fontSize: 18),

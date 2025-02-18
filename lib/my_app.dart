@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:guarda_sementes_front/src/SplashScreen.dart';
+import 'package:guarda_sementes_front/splash_screen.dart';
 import 'package:guarda_sementes_front/src/pages/login/login_page.dart';
 
 class MyApp extends StatefulWidget {

@@ -151,7 +151,8 @@ class _LoginPageState extends State<LoginPage> {
                                               backgroundColor:
                                                   Colors.lightBlueAccent),
                                           onPressed: () {
-                                            debugPrint('ok');
+                                            debugPrint(
+                                                'Clicou em cadastrar-se');
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(

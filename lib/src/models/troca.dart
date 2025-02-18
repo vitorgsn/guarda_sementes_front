@@ -6,11 +6,13 @@ class Troca {
   final DateTime? troDtCreatedAt;
   final String? usuNrIdRemetente;
   final String? usuTxNomeRemetente;
+  final String? conTxNumeroRemetente;
   final int semNrIdSementeRemetente;
   final String? semTxNomeRemetente;
   final double troNrQuantidadeSementeRemetente;
   final String usuNrIdDestinatario;
   final String? usuTxNomeDestinatario;
+  final String? conTxNumeroDestinatario;
   final int semNrIdSementeDestinatario;
   final String? semTxNomeDestinatario;
   final double troNrQuantidadeSementeDestinatario;
@@ -23,11 +25,13 @@ class Troca {
     this.troDtCreatedAt,
     this.usuNrIdRemetente,
     this.usuTxNomeRemetente,
+    this.conTxNumeroRemetente,
     required this.semNrIdSementeRemetente,
     this.semTxNomeRemetente,
     required this.troNrQuantidadeSementeRemetente,
     required this.usuNrIdDestinatario,
     this.usuTxNomeDestinatario,
+    this.conTxNumeroDestinatario,
     required this.semNrIdSementeDestinatario,
     this.semTxNomeDestinatario,
     required this.troNrQuantidadeSementeDestinatario,
@@ -46,12 +50,14 @@ class Troca {
           : null,
       usuNrIdRemetente: json['usuNrIdRemetente'],
       usuTxNomeRemetente: json['usuTxNomeRemetente'],
+      conTxNumeroRemetente: json['conTxNumeroRemetente'],
       semNrIdSementeRemetente: json['semNrIdSementeRemetente'] ?? 0,
       semTxNomeRemetente: json['semTxNomeRemetente'],
       troNrQuantidadeSementeRemetente:
           (json['troNrQuantidadeSementeRemetente'] ?? 0).toDouble(),
       usuNrIdDestinatario: json['usuNrIdDestinatario'] ?? '',
       usuTxNomeDestinatario: json['usuTxNomeDestinatario'],
+      conTxNumeroDestinatario: json['conTxNumeroDestinatario'],
       semNrIdSementeDestinatario: json['semNrIdSementeDestinatario'] ?? 0,
       semTxNomeDestinatario: json['semTxNomeDestinatario'],
       troNrQuantidadeSementeDestinatario:
@@ -69,11 +75,13 @@ class Troca {
                   troDtCreatedAt: $troDtCreatedAt,
                   usuNrIdRemetente: $usuNrIdRemetente,
                   usuTxNomeRemetente: $usuTxNomeRemetente,
+                  conTxNumeroRemetente: $conTxNumeroRemetente,
                   semNrIdSementeRemetente: $semNrIdSementeRemetente,
                   semTxNomeRemetente: $semTxNomeRemetente,
                   troNrQuantidadeSementeRemetente: $troNrQuantidadeSementeRemetente,
                   usuNrIdDestinatario: $usuNrIdDestinatario,
                   usuTxNomeDestinatario: $usuTxNomeDestinatario,
+                  conTxNumeroDestinatario: $conTxNumeroDestinatario,
                   semNrIdSementeDestinatario: $semNrIdSementeDestinatario,
                   semTxNomeDestinatario: $semTxNomeDestinatario,
                   troNrQuantidadeSementeDestinatario: $troNrQuantidadeSementeDestinatario

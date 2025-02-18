@@ -226,7 +226,7 @@ class _TrocaPageState extends State<TrocaPage> {
                         ),
                         Expanded(
                           child: Text(
-                            '${troca.usuTxNomeRemetente} ofertou ${troca.semTxNomeRemetente} - ${troca.troNrQuantidadeSementeRemetente} kg',
+                            '${troca.usuTxNomeRemetente} ofertou ${troca.troNrQuantidadeSementeRemetente} kg de ${troca.semTxNomeRemetente}',
                             style: const TextStyle(
                               fontSize: 20,
                             ),
@@ -249,7 +249,7 @@ class _TrocaPageState extends State<TrocaPage> {
                         ),
                         Expanded(
                           child: Text(
-                            '${troca.usuTxNomeDestinatario} ofertou ${troca.semTxNomeDestinatario} - ${troca.troNrQuantidadeSementeDestinatario} kg',
+                            '${troca.usuTxNomeDestinatario} ofertou ${troca.troNrQuantidadeSementeDestinatario} kg de ${troca.semTxNomeDestinatario}',
                             style: const TextStyle(
                               fontSize: 20,
                             ),

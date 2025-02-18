@@ -74,7 +74,7 @@ class _EnderecoFormPageState extends State<EnderecoFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    InputDecoration _inputDecoration(String label) {
+    InputDecoration inputDecoration(String label) {
       return InputDecoration(
         labelText: label,
         filled: true,
@@ -117,7 +117,7 @@ class _EnderecoFormPageState extends State<EnderecoFormPage> {
                   return DropdownButtonFormField<Cidade>(
                     value: _cidadeSelecionada,
                     hint: const Text('Selecione a cidade'),
-                    decoration: _inputDecoration('Cidade *'),
+                    decoration: inputDecoration('Cidade *'),
                     items: cidades.map((cidade) {
                       return DropdownMenuItem(
                         value: cidade,
@@ -138,28 +138,28 @@ class _EnderecoFormPageState extends State<EnderecoFormPage> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _bairroController,
-                decoration: _inputDecoration('Bairro *'),
+                decoration: inputDecoration('Bairro *'),
                 validator: (value) =>
                     value!.isEmpty ? 'Informe o bairro' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _logradouroController,
-                decoration: _inputDecoration('Logradouro *'),
+                decoration: inputDecoration('Logradouro *'),
                 validator: (value) =>
                     value!.isEmpty ? 'Informe o logradouro' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _numeroController,
-                decoration: _inputDecoration('Número *'),
+                decoration: inputDecoration('Número *'),
                 validator: (value) =>
                     value!.isEmpty ? 'Informe o número' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _referenciaController,
-                decoration: _inputDecoration('Referência *'),
+                decoration: inputDecoration('Referência *'),
                 validator: (value) =>
                     value!.isEmpty ? 'Informe a referência' : null,
               ),

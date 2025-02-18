@@ -137,6 +137,7 @@ class _PerfilPageState extends State<PerfilPage> {
                       onPressed: () async {
                         try {
                           await _authenticationController.logout();
+
                           Navigator.of(context).pushReplacementNamed('/login');
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(

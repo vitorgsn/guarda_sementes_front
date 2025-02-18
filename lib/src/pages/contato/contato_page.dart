@@ -22,7 +22,7 @@ class _ContatoPageState extends State<ContatoPage> {
     final contatoController =
         Provider.of<ContatoController>(context, listen: false);
     await contatoController.listarContatos(filtros: {
-      'sort': 'con_nr_id,desc',
+      'sort': 'con_bl_contato_padrao,desc',
     });
   }
 
@@ -48,12 +48,23 @@ class _ContatoPageState extends State<ContatoPage> {
               elevation: 3,
               child: ListTile(
                 contentPadding: const EdgeInsets.all(16.0),
-                title: Text(
-                  'Telefone: ${contato.conTxNumero}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
+                title: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Telefone: ${contato.conTxNumero}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    if (contato.conBlContatoPadrao == true)
+                      const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                  ],
                 ),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -61,7 +61,10 @@ class _EnderecoPageState extends State<EnderecoPage> {
                       ),
                     ),
                     if (endereco.endBlEnderecoPadrao == true)
-                      const Icon(Icons.star, color: Colors.amber),
+                      const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
                   ],
                 ),
                 subtitle: Column(

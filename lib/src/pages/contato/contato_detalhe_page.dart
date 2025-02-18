@@ -19,6 +19,7 @@ class ContatoDetalhePage extends StatefulWidget {
 class _ContatoDetalhePageState extends State<ContatoDetalhePage> {
   late MaskedTextController _numeroController;
   late TextEditingController _emailController;
+  late bool _isContatoPadrao = false;
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _ContatoDetalhePageState extends State<ContatoDetalhePage> {
     if (contato != null) {
       _numeroController.text = contato.conTxNumero;
       _emailController.text = contato.conTxEmail;
+      _isContatoPadrao = contato.conBlContatoPadrao ?? false;
     }
 
     setState(() {});
@@ -54,6 +56,7 @@ class _ContatoDetalhePageState extends State<ContatoDetalhePage> {
       conNrId: widget.conNrId,
       conTxNumero: _numeroController.text,
       conTxEmail: _emailController.text,
+      conBlContatoPadrao: _isContatoPadrao,
     );
 
     await ContatoController().atualizarContato(contato);
@@ -95,7 +98,7 @@ class _ContatoDetalhePageState extends State<ContatoDetalhePage> {
         Navigator.pop(context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Erro ao excluir contato: $e")),
+          SnackBar(content: Text(e.toString())),
         );
       }
     }
@@ -103,7 +106,7 @@ class _ContatoDetalhePageState extends State<ContatoDetalhePage> {
 
   @override
   Widget build(BuildContext context) {
-    InputDecoration _inputDecoration(String label) {
+    InputDecoration inputDecoration(String label) {
       return InputDecoration(
         labelText: label,
         filled: true,
@@ -136,7 +139,7 @@ class _ContatoDetalhePageState extends State<ContatoDetalhePage> {
             TextFormField(
               controller: _numeroController,
               keyboardType: TextInputType.phone,
-              decoration: _inputDecoration('Telefone *'),
+              decoration: inputDecoration('Telefone *'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'O telefone é obrigatório';
@@ -147,7 +150,7 @@ class _ContatoDetalhePageState extends State<ContatoDetalhePage> {
             const SizedBox(height: 8),
             TextFormField(
               controller: _emailController,
-              decoration: _inputDecoration('E-mail *'),
+              decoration: inputDecoration('E-mail *'),
               keyboardType: TextInputType.emailAddress,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) {
@@ -160,6 +163,22 @@ class _ContatoDetalhePageState extends State<ContatoDetalhePage> {
                 }
                 return null;
               },
+            ),
+            Row(
+              children: [
+                Checkbox(
+                  value: _isContatoPadrao,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isContatoPadrao = value ?? false;
+                    });
+                  },
+                ),
+                const Text(
+                  'Contato Padrão',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             Row(

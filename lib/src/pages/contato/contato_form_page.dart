@@ -15,6 +15,7 @@ class _ContatoFormPageState extends State<ContatoFormPage> {
   final _formKey = GlobalKey<FormState>();
   final _numeroController = MaskedTextController(mask: '(00) 0 0000-0000');
   final _emailController = TextEditingController();
+  bool _contatoPadrao = false;
 
   @override
   void dispose() {
@@ -28,6 +29,7 @@ class _ContatoFormPageState extends State<ContatoFormPage> {
       final contato = Contato(
         conTxNumero: _numeroController.text,
         conTxEmail: _emailController.text,
+        conBlContatoPadrao: _contatoPadrao,
       );
 
       try {
@@ -49,7 +51,7 @@ class _ContatoFormPageState extends State<ContatoFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    InputDecoration _inputDecoration(String label) {
+    InputDecoration inputDecoration(String label) {
       return InputDecoration(
         labelText: label,
         filled: true,
@@ -83,7 +85,7 @@ class _ContatoFormPageState extends State<ContatoFormPage> {
               TextFormField(
                 controller: _numeroController,
                 keyboardType: TextInputType.phone,
-                decoration: _inputDecoration('Telefone *'),
+                decoration: inputDecoration('Telefone *'),
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -99,7 +101,7 @@ class _ContatoFormPageState extends State<ContatoFormPage> {
               const SizedBox(height: 8),
               TextFormField(
                 controller: _emailController,
-                decoration: _inputDecoration('E-mail *'),
+                decoration: inputDecoration('E-mail *'),
                 keyboardType: TextInputType.emailAddress,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
@@ -112,6 +114,23 @@ class _ContatoFormPageState extends State<ContatoFormPage> {
                   }
                   return null;
                 },
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Checkbox(
+                    value: _contatoPadrao,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        _contatoPadrao = value ?? false;
+                      });
+                    },
+                  ),
+                  const Text(
+                    'Contato Padrão',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
               Row(

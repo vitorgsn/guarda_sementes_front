@@ -81,7 +81,7 @@ class _ArmazemFormPageState extends State<ArmazemFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    InputDecoration _inputDecoration(String label) {
+    InputDecoration inputDecoration(String label) {
       return InputDecoration(
         labelText: label,
         filled: true,
@@ -163,7 +163,7 @@ class _ArmazemFormPageState extends State<ArmazemFormPage> {
                   return DropdownButtonFormField<CategoriaArmazem>(
                     value: _categoriaSelecionada,
                     hint: const Text('Selecione a categoria'),
-                    decoration: _inputDecoration('Categoria *'),
+                    decoration: inputDecoration('Categoria *'),
                     items: categorias.map((categoria) {
                       return DropdownMenuItem(
                         value: categoria,
@@ -184,7 +184,7 @@ class _ArmazemFormPageState extends State<ArmazemFormPage> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _descricaoController,
-                decoration: _inputDecoration('Descrição'),
+                decoration: inputDecoration('Descrição'),
                 validator: (value) =>
                     value!.isEmpty ? 'Informe a descrição' : null,
               ),
