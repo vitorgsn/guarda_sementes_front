@@ -292,10 +292,12 @@ class _TrocaPageState extends State<TrocaPage> {
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          troca.troTxInstrucoes,
-                          style: const TextStyle(
-                            fontSize: 18,
+                        Expanded(
+                          child: Text(
+                            troca.troTxInstrucoes,
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
                         ),
                       ],

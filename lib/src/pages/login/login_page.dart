@@ -17,6 +17,51 @@ class _LoginPageState extends State<LoginPage> {
       AuthenticationController();
   bool _isObscureText = true;
 
+  Future<bool> _mostrarInformativo() async {
+    return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Informativo"),
+            content: const SizedBox(
+              width: double.maxFinite,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Essa opção ainda não está disponível, solicite um acesso.\n'
+                    'WhatsApp: Vitor Gabriel - (79) 9 9909-4673.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 5,
+                  backgroundColor: Colors.grey,
+                ),
+                onPressed: () => Navigator.pop(context, false),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+                  child: const Text(
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    textAlign: TextAlign.center,
+                    'OK',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,10 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                                               elevation: 5,
                                               backgroundColor:
                                                   Colors.lightBlueAccent),
-                                          onPressed: () {
-                                            debugPrint(
-                                                'Clicou em cadastrar-se');
-                                          },
+                                          onPressed: _mostrarInformativo,
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 15, vertical: 15),
