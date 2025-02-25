@@ -297,130 +297,132 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
       appBar: AppBar(
         title: Text(_tituloAppBar),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () async {
-                await _pickImage(ImageSource.gallery);
-              },
-              child: Container(
-                height: 150,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.grey[50],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () async {
+                  await _pickImage(ImageSource.gallery);
+                },
+                child: Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey[50],
+                  ),
+                  child: _imagem == null
+                      ? const Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.photo_camera,
+                                size: 50,
+                                color: Colors.grey,
+                              ),
+                              Text(
+                                'Clique para adicionar uma imagem',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.file(
+                            _imagem!,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                 ),
-                child: _imagem == null
-                    ? const Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.photo_camera,
-                              size: 50,
-                              color: Colors.grey,
-                            ),
-                            Text(
-                              'Clique para adicionar uma imagem',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      )
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.file(
-                          _imagem!,
-                          fit: BoxFit.cover,
-                        ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _nomeController,
+                decoration: _inputDecoration('Nome *'),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _quantidadeController,
+                decoration: _inputDecoration('Quantidade (kg)*'),
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  CurrencyInputFormatter(
+                    thousandSeparator: ThousandSeparator.None,
+                    leadingSymbol: '',
+                    trailingSymbol: ' kg',
+                    mantissaLength: 3,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _descricaoController,
+                decoration: _inputDecoration('Descrição'),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      backgroundColor: Colors.red,
+                    ),
+                    onPressed: _excluirSemente,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      child: const Text(
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        textAlign: TextAlign.center,
+                        'Excluir',
                       ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _nomeController,
-              decoration: _inputDecoration('Nome *'),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _quantidadeController,
-              decoration: _inputDecoration('Quantidade (kg)*'),
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                CurrencyInputFormatter(
-                  thousandSeparator: ThousandSeparator.None,
-                  leadingSymbol: '',
-                  trailingSymbol: ' kg',
-                  mantissaLength: 3,
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _descricaoController,
-              decoration: _inputDecoration('Descrição'),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 5,
-                    backgroundColor: Colors.red,
-                  ),
-                  onPressed: _excluirSemente,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 15),
-                    child: const Text(
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                      textAlign: TextAlign.center,
-                      'Excluir',
                     ),
                   ),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 5,
-                    backgroundColor: Theme.of(context).primaryColor,
-                  ),
-                  onPressed: _salvarSemente,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 15),
-                    child: const Text(
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                      textAlign: TextAlign.center,
-                      'Salvar',
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      backgroundColor: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: _salvarSemente,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      child: const Text(
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        textAlign: TextAlign.center,
+                        'Salvar',
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 5,
-                backgroundColor: Theme.of(context).primaryColor,
+                ],
               ),
-              onPressed: _mostrarDialogoTroca,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                child: const Text(
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                  textAlign: TextAlign.center,
-                  'Disponibilizar para troca',
+              const SizedBox(height: 16),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 5,
+                  backgroundColor: Theme.of(context).primaryColor,
+                ),
+                onPressed: _mostrarDialogoTroca,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  child: const Text(
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    textAlign: TextAlign.center,
+                    'Disponibilizar para troca',
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
