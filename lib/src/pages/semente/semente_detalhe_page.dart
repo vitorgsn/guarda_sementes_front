@@ -135,13 +135,27 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
         await sementeController.excluirSemente(widget.semNrId);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Semente excluída com sucesso!')),
+          const SnackBar(
+            backgroundColor: Colors.greenAccent,
+            content: Text(
+              'Semente excluída com sucesso!',
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
 
         Navigator.pop(context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Erro ao excluir semente: $e")),
+          SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: Text(
+              e.toString(),
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
       }
     }
@@ -184,7 +198,13 @@ class _SementeDetalhePageState extends State<SementeDetalhePage> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('Semente disponibilizada para troca com sucesso!')),
+          backgroundColor: Colors.greenAccent,
+          content: Text(
+            'Semente disponibilizada para troca com sucesso!',
+            textAlign: TextAlign.center,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
 
       Navigator.pop(context);

@@ -60,13 +60,27 @@ class _EnderecoFormPageState extends State<EnderecoFormPage> {
             .criarEndereco(endereco);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Endereço salvo com sucesso!')),
+          const SnackBar(
+            backgroundColor: Colors.greenAccent,
+            content: Text(
+              'Endereço salvo com sucesso!',
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
 
         Navigator.pop(context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao salvar endereço: $e')),
+          SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: Text(
+              e.toString(),
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
       }
     }
@@ -96,130 +110,132 @@ class _EnderecoFormPageState extends State<EnderecoFormPage> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Cadastrar Endereço')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              FutureBuilder<List<Cidade>>(
-                future: _futureCidades,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (snapshot.hasError) {
-                    return const Center(
-                        child: Text('Erro ao carregar cidades'));
-                  }
-                  final cidades = snapshot.data!;
-                  return DropdownButtonFormField<Cidade>(
-                    value: _cidadeSelecionada,
-                    hint: const Text('Selecione a cidade'),
-                    decoration: inputDecoration('Cidade *'),
-                    items: cidades.map((cidade) {
-                      return DropdownMenuItem(
-                        value: cidade,
-                        child:
-                            Text('${cidade.cidTxNome} - ${cidade.estTxSigla}'),
-                      );
-                    }).toList(),
-                    onChanged: (cidade) {
-                      setState(() {
-                        _cidadeSelecionada = cidade;
-                      });
-                    },
-                    validator: (value) =>
-                        value == null ? 'Selecione uma cidade' : null,
-                  );
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _bairroController,
-                decoration: inputDecoration('Bairro *'),
-                validator: (value) =>
-                    value!.isEmpty ? 'Informe o bairro' : null,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _logradouroController,
-                decoration: inputDecoration('Logradouro *'),
-                validator: (value) =>
-                    value!.isEmpty ? 'Informe o logradouro' : null,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _numeroController,
-                decoration: inputDecoration('Número *'),
-                validator: (value) =>
-                    value!.isEmpty ? 'Informe o número' : null,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _referenciaController,
-                decoration: inputDecoration('Referência *'),
-                validator: (value) =>
-                    value!.isEmpty ? 'Informe a referência' : null,
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _enderecoPadrao,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _enderecoPadrao = value ?? false;
-                      });
-                    },
-                  ),
-                  const Text(
-                    'Endereço Padrão',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 5,
-                      backgroundColor: Colors.grey,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FutureBuilder<List<Cidade>>(
+                  future: _futureCidades,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return const Center(
+                          child: Text('Erro ao carregar cidades'));
+                    }
+                    final cidades = snapshot.data!;
+                    return DropdownButtonFormField<Cidade>(
+                      value: _cidadeSelecionada,
+                      hint: const Text('Selecione a cidade'),
+                      decoration: inputDecoration('Cidade *'),
+                      items: cidades.map((cidade) {
+                        return DropdownMenuItem(
+                          value: cidade,
+                          child: Text(
+                              '${cidade.cidTxNome} - ${cidade.estTxSigla}'),
+                        );
+                      }).toList(),
+                      onChanged: (cidade) {
+                        setState(() {
+                          _cidadeSelecionada = cidade;
+                        });
+                      },
+                      validator: (value) =>
+                          value == null ? 'Selecione uma cidade' : null,
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _bairroController,
+                  decoration: inputDecoration('Bairro *'),
+                  validator: (value) =>
+                      value!.isEmpty ? 'Informe o bairro' : null,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _logradouroController,
+                  decoration: inputDecoration('Logradouro *'),
+                  validator: (value) =>
+                      value!.isEmpty ? 'Informe o logradouro' : null,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _numeroController,
+                  decoration: inputDecoration('Número *'),
+                  validator: (value) =>
+                      value!.isEmpty ? 'Informe o número' : null,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _referenciaController,
+                  decoration: inputDecoration('Referência *'),
+                  validator: (value) =>
+                      value!.isEmpty ? 'Informe a referência' : null,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _enderecoPadrao,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _enderecoPadrao = value ?? false;
+                        });
+                      },
                     ),
-                    onPressed: () => Navigator.pop(context),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 15),
-                      child: const Text(
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                        textAlign: TextAlign.center,
-                        'Cancelar',
+                    const Text(
+                      'Endereço Padrão',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 5,
+                        backgroundColor: Colors.grey,
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 15),
+                        child: const Text(
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                          textAlign: TextAlign.center,
+                          'Cancelar',
+                        ),
                       ),
                     ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 5,
-                      backgroundColor: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: _salvarEndereco,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 15),
-                      child: const Text(
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                        textAlign: TextAlign.center,
-                        'Salvar',
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 5,
+                        backgroundColor: Theme.of(context).primaryColor,
+                      ),
+                      onPressed: _salvarEndereco,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 15),
+                        child: const Text(
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                          textAlign: TextAlign.center,
+                          'Salvar',
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

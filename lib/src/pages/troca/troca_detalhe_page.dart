@@ -22,13 +22,28 @@ class _TrocaDetalhePageState extends State<TrocaDetalhePage> {
         await trocaController.aceitarTroca(widget.troca.troNrId!);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Troca aceita com sucesso!')),
+          const SnackBar(
+            backgroundColor: Colors.greenAccent,
+            content: Text(
+              'Troca aceita com sucesso!',
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
 
         Navigator.pop(context);
       } catch (e) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.toString())));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: Text(
+              e.toString(),
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
     }
   }
@@ -42,13 +57,28 @@ class _TrocaDetalhePageState extends State<TrocaDetalhePage> {
         await trocaController.recusarTroca(widget.troca.troNrId!);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Troca recusada com sucesso!')),
+          const SnackBar(
+            backgroundColor: Colors.greenAccent,
+            content: Text(
+              'Troca recusada com sucesso!',
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
 
         Navigator.pop(context);
       } catch (e) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.toString())));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: Text(
+              e.toString(),
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
     }
   }
@@ -62,13 +92,28 @@ class _TrocaDetalhePageState extends State<TrocaDetalhePage> {
         await trocaController.cancelarTroca(widget.troca.troNrId!);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Troca cancelada com sucesso!')),
+          const SnackBar(
+            backgroundColor: Colors.greenAccent,
+            content: Text(
+              'Troca cancelada com sucesso!',
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
 
         Navigator.pop(context);
       } catch (e) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.toString())));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: Text(
+              e.toString(),
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
     }
   }

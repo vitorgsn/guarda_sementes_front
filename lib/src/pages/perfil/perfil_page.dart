@@ -143,7 +143,10 @@ class _PerfilPageState extends State<PerfilPage> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               backgroundColor: Colors.redAccent,
-                              content: Text('Falha ao fazer logout'),
+                              content: Text(
+                                'Falha ao sair do aplicativo, por favor, tente novamente mais tarde.',
+                                textAlign: TextAlign.center,
+                              ),
                               behavior: SnackBarBehavior.floating,
                             ),
                           );

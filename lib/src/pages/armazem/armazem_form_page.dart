@@ -67,16 +67,74 @@ class _ArmazemFormPageState extends State<ArmazemFormPage> {
             .criarArmazem(armazem);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Armazém salvo com sucesso!')),
+          const SnackBar(
+            backgroundColor: Colors.greenAccent,
+            content: Text(
+              'Armazém salvo com sucesso!',
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
 
         Navigator.pop(context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao salvar armazém: $e')),
+          SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: Text(
+              e.toString(),
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
       }
     }
+  }
+
+  Future<bool> _mostrarInformativo() async {
+    return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Informativo"),
+            content: const SizedBox(
+              width: double.maxFinite,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Essa opção ainda não está disponível, por favor, aguarde.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 5,
+                  backgroundColor: Colors.grey,
+                ),
+                onPressed: () => Navigator.pop(context, false),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+                  child: const Text(
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    textAlign: TextAlign.center,
+                    'OK',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ) ??
+        false;
   }
 
   @override
@@ -112,7 +170,7 @@ class _ArmazemFormPageState extends State<ArmazemFormPage> {
             children: [
               GestureDetector(
                 onTap: () async {
-                  await _pickImage(ImageSource.gallery);
+                  await _mostrarInformativo();
                 },
                 child: Container(
                   height: 150,

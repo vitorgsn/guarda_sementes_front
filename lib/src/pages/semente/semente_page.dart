@@ -63,13 +63,27 @@ class _SementePageState extends State<SementePage> {
         await armazemController.excluirArmazem(widget.armNrId);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Armazém excluído com sucesso!')),
+          const SnackBar(
+            backgroundColor: Colors.greenAccent,
+            content: Text(
+              'Armazém excluído com sucesso!',
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
 
         Navigator.pop(context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Erro ao excluir Armazém: $e")),
+          SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: Text(
+              e.toString(),
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
       }
     }

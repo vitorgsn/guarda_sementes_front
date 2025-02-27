@@ -98,7 +98,32 @@ class _EscolherSementeTrocaPageState extends State<EscolherSementeTrocaPage> {
           _converterQuantidade(_quantidadeParaTrocaController.text)!,
     );
 
-    await trocaController.criarTroca(troca);
+    try {
+      await trocaController.criarTroca(troca);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.greenAccent,
+          content: Text(
+            'Troca criada com sucesso!',
+            textAlign: TextAlign.center,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.redAccent,
+          content: Text(
+            e.toString(),
+            textAlign: TextAlign.center,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+
     Navigator.pop(context);
   }
 

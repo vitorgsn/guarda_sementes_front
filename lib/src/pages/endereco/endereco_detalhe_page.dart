@@ -57,7 +57,16 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
         setState(() {});
       }
     } catch (e) {
-      debugPrint("Erro ao carregar endereço: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.redAccent,
+          content: Text(
+            e.toString(),
+            textAlign: TextAlign.center,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
@@ -75,7 +84,16 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
         });
       }
     } catch (e) {
-      debugPrint("Erro ao carregar cidades: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.redAccent,
+          content: Text(
+            e.toString(),
+            textAlign: TextAlign.center,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
@@ -101,7 +119,33 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
 
     final enderecoController =
         Provider.of<EnderecoController>(context, listen: false);
-    await enderecoController.atualizarEndereco(endereco);
+
+    try {
+      await enderecoController.atualizarEndereco(endereco);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.greenAccent,
+          content: Text(
+            'Endereço salvo com sucesso!',
+            textAlign: TextAlign.center,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.redAccent,
+          content: Text(
+            e.toString(),
+            textAlign: TextAlign.center,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+
     Navigator.pop(context);
   }
 
@@ -134,13 +178,27 @@ class _EnderecoDetalhePageState extends State<EnderecoDetalhePage> {
         await enderecoController.excluirEndereco(widget.endNrId);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Endereço excluído com sucesso!')),
+          const SnackBar(
+            backgroundColor: Colors.greenAccent,
+            content: Text(
+              'Endereço excluído com sucesso!',
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
 
         Navigator.pop(context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+          SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: Text(
+              e.toString(),
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
       }
     }

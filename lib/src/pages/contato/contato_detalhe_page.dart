@@ -59,7 +59,32 @@ class _ContatoDetalhePageState extends State<ContatoDetalhePage> {
       conBlContatoPadrao: _isContatoPadrao,
     );
 
-    await ContatoController().atualizarContato(contato);
+    try {
+      await ContatoController().atualizarContato(contato);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.greenAccent,
+          content: Text(
+            'Contato salvo com sucesso!',
+            textAlign: TextAlign.center,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.redAccent,
+          content: Text(
+            e.toString(),
+            textAlign: TextAlign.center,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+
     Navigator.pop(context);
   }
 
@@ -92,13 +117,27 @@ class _ContatoDetalhePageState extends State<ContatoDetalhePage> {
         await contatoController.excluirContato(widget.conNrId);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Contato excluído com sucesso!')),
+          const SnackBar(
+            backgroundColor: Colors.greenAccent,
+            content: Text(
+              'Contato excluído com sucesso!',
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
 
         Navigator.pop(context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+          SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: Text(
+              e.toString(),
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
       }
     }
